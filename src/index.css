@@ -13,6 +13,9 @@
   color-scheme: dark;
 }
 
+/* Ensure native cursor is visible by default (restore if previously hidden) */
+body { cursor: auto; }
+
 /* Click follower (ripple) */
 #follower {
   position: fixed;
