@@ -15,6 +15,18 @@
 
 /* No explicit body cursor rule — allow user agent / elements to control cursor */
 
+/* Custom cursor styles */
+.custom-cursor {
+  mix-blend-mode: difference;
+  will-change: transform, opacity;
+}
+
+/* Hide native cursor when custom cursor is present */
+/* Force-hide the native cursor everywhere (including form controls) so only the custom pointer is visible */
+html, body, #root, * {
+  cursor: none !important;
+}
+
 /* Click follower (ripple) */
 /* follower removed */
 
