@@ -229,3 +229,5 @@ body { cursor: auto; }
     transform: rotate(360deg);
   }
 }
+
+/* No custom cursor — native cursor restored */

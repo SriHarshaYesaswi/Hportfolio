@@ -1,106 +1,84 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef } from "react";
 
-export default function CustomCursor({
-  dotColor = 'var(--cursor-color, #915eff)',
-  ringColor = 'rgba(145,94,255,0.14)',
-  dotSize = 8,
-  ringSize = 36,
-} = {}) {
+const CustomCursor = ({ color = "#915eff" }) => {
   const dotRef = useRef(null);
   const ringRef = useRef(null);
-  const rafRef = useRef(null);
-  const posRef = useRef({ x: -9999, y: -9999 });
-  const ringPosRef = useRef({ x: -9999, y: -9999 });
+  const mouse = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
     const dot = dotRef.current;
     const ring = ringRef.current;
     if (!dot || !ring) return;
 
-    // Hide native cursor globally
-    document.documentElement.style.cursor = 'none';
+    // hide native cursor
+    const prevCursor = document.body.style.cursor;
+    document.body.style.cursor = "none";
 
-    let mouseX = -9999;
-    let mouseY = -9999;
+    let rafId;
 
-    function onMove(e) {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-      posRef.current.x = mouseX;
-      posRef.current.y = mouseY;
-    }
+    const onMove = (e) => {
+      mouse.current.x = e.clientX;
+      mouse.current.y = e.clientY;
+      // immediate position for the dot
+      dot.style.transform = `translate3d(${mouse.current.x - 4}px, ${mouse.current.y - 4}px, 0)`;
+    };
 
-    function onHover(e) {
-      const target = e.target;
-      if (target.closest && target.closest('a, button, input, textarea, .cursor-large, .cursor-pointer')) {
-        dot.style.transform = `translate3d(${mouseX - dotSize / 2}px, ${mouseY - dotSize / 2}px, 0) scale(1.3)`;
-        ring.style.transform = `translate3d(${mouseX - ringSize / 2}px, ${mouseY - ringSize / 2}px, 0) scale(1.4)`;
-        ring.style.borderColor = ringColor;
-      } else {
-        dot.style.transform = `translate3d(${mouseX - dotSize / 2}px, ${mouseY - dotSize / 2}px, 0) scale(1)`;
-        ring.style.transform = `translate3d(${mouseX - ringSize / 2}px, ${mouseY - ringSize / 2}px, 0) scale(1)`;
-        ring.style.borderColor = 'rgba(255,255,255,0.06)';
-      }
-    }
+    const render = () => {
+      // ring lags behind
+      const rx = parseFloat(ring.dataset.x || 0);
+      const ry = parseFloat(ring.dataset.y || 0);
+      const dx = mouse.current.x - rx;
+      const dy = mouse.current.y - ry;
+      const nx = rx + dx * 0.15;
+      const ny = ry + dy * 0.15;
+      ring.style.transform = `translate3d(${nx - 18}px, ${ny - 18}px, 0)`;
+      ring.dataset.x = nx;
+      ring.dataset.y = ny;
+      rafId = requestAnimationFrame(render);
+    };
 
-    function loop() {
-      const ease = 0.16;
-      ringPosRef.current.x += (posRef.current.x - ringPosRef.current.x) * ease;
-      ringPosRef.current.y += (posRef.current.y - ringPosRef.current.y) * ease;
+    window.addEventListener("mousemove", onMove);
+    rafId = requestAnimationFrame(render);
 
-      dot.style.transform = `translate3d(${posRef.current.x - dotSize / 2}px, ${posRef.current.y - dotSize / 2}px, 0)`;
-      ring.style.transform = `translate3d(${ringPosRef.current.x - ringSize / 2}px, ${ringPosRef.current.y - ringSize / 2}px, 0)`;
-
-      rafRef.current = requestAnimationFrame(loop);
-    }
-
-    window.addEventListener('mousemove', onMove);
-    window.addEventListener('mouseover', onHover);
-
-    rafRef.current = requestAnimationFrame(loop);
+    // show click animation
+    const onDown = () => {
+      dot.classList.add("cursor-click");
+      ring.classList.add("cursor-click-ring");
+    };
+    const onUp = () => {
+      dot.classList.remove("cursor-click");
+      ring.classList.remove("cursor-click-ring");
+    };
+    window.addEventListener("mousedown", onDown);
+    window.addEventListener("mouseup", onUp);
 
     return () => {
-      document.documentElement.style.cursor = '';
-      window.removeEventListener('mousemove', onMove);
-      window.removeEventListener('mouseover', onHover);
-      cancelAnimationFrame(rafRef.current);
+      cancelAnimationFrame(rafId);
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mousedown", onDown);
+      window.removeEventListener("mouseup", onUp);
+      document.body.style.cursor = prevCursor;
     };
-  }, [dotSize, ringSize, ringColor]);
+  }, [color]);
 
   return (
     <>
       <div
-        ref={ringRef}
-        style={{
-          position: 'fixed',
-          left: 0,
-          top: 0,
-          pointerEvents: 'none',
-          zIndex: 9999,
-          width: ringSize,
-          height: ringSize,
-          borderRadius: '50%',
-          border: '2px solid rgba(255,255,255,0.06)',
-          transform: 'translate3d(-9999px, -9999px, 0)',
-          transition: 'border-color 120ms ease, transform 120ms ease',
-        }}
+        ref={dotRef}
+        className="custom-cursor-dot"
+        aria-hidden="true"
+        style={{ backgroundColor: color }}
       />
       <div
-        ref={dotRef}
-        style={{
-          position: 'fixed',
-          left: 0,
-          top: 0,
-          pointerEvents: 'none',
-          zIndex: 10000,
-          width: dotSize,
-          height: dotSize,
-          borderRadius: '50%',
-          background: dotColor,
-          transform: 'translate3d(-9999px, -9999px, 0)',
-          transition: 'transform 80ms linear',
-        }}
+        ref={ringRef}
+        className="custom-cursor-ring"
+        data-x="0"
+        data-y="0"
+        aria-hidden="true"
+        style={{ borderColor: color }}
       />
     </>
   );
-}
+};
+
+export default CustomCursor;
