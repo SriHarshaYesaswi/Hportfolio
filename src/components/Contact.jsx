@@ -7,6 +7,8 @@ import { SectionWrapper } from "../hoc";
 import emailjs from "@emailjs/browser";
 import { FaGithub, FaLinkedin, FaInstagram } from "react-icons/fa";
 import { socialLinks } from "../constants";
+import { ref, push, set } from "firebase/database";
+import { getDB } from "../firebase";
 
 
 // template_49jw5yq
@@ -48,6 +50,27 @@ const Contact = () => {
       )
       .then(
         () => {
+          // Also write the message to Firebase Realtime Database under `messages/`
+          try {
+            const db = getDB();
+            if (db) {
+              const messagesRef = ref(db, "messages");
+              const newMsgRef = push(messagesRef);
+              set(newMsgRef, {
+                name: form.name,
+                email: form.email,
+                message: form.message,
+                timestamp: Date.now(),
+              }).catch((dbErr) => {
+                console.error("Failed to write message to RTDB:", dbErr);
+              });
+            } else {
+              console.warn("Skipping RTDB write because DB is not available");
+            }
+          } catch (err) {
+            console.error("RTDB write error:", err);
+          }
+
           setloading(false);
           alert("Thank you. I will get back to you as soon as possible");
           setform({
