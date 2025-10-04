@@ -8,11 +8,12 @@ export default function CustomCursor({ color = 'var(--cursor-color)', size = 36 
   useEffect(() => {
     const svg = svgRef.current;
     if (!svg) return;
-
-    // Hide native cursor
-    document.documentElement.style.cursor = 'none';
+    // Activate cursor only when inside the app root to avoid overriding system cursor globally.
+    const rootEl = document.getElementById('root') || document.body;
+    let isInside = false;
 
     function onMove(e) {
+      if (!isInside) return;
       const x = e.clientX;
       const y = e.clientY;
       // Offset so the tip of the arrow points to the pointer (approx values)
@@ -22,6 +23,7 @@ export default function CustomCursor({ color = 'var(--cursor-color)', size = 36 
     }
 
     function onHover(e) {
+      if (!isInside) return;
       const target = e.target;
       if (target.closest && target.closest('a, button, input, textarea, .cursor-large, .cursor-pointer')) {
         svg.style.scale = '1.3';
@@ -32,11 +34,33 @@ export default function CustomCursor({ color = 'var(--cursor-color)', size = 36 
       }
     }
 
+    function onEnter() {
+      isInside = true;
+      // hide native cursor only when inside
+      document.documentElement.style.cursor = 'none';
+      svg.style.display = 'block';
+    }
+
+    function onLeave() {
+      isInside = false;
+      document.documentElement.style.cursor = '';
+      // move svg offscreen to avoid showing outside site
+      svg.style.transform = 'translate3d(-9999px, -9999px, 0)';
+      svg.style.display = 'none';
+    }
+
+    // start hidden
+    svg.style.display = 'none';
+
+    rootEl.addEventListener('mouseenter', onEnter);
+    rootEl.addEventListener('mouseleave', onLeave);
     window.addEventListener('mousemove', onMove);
     window.addEventListener('mouseover', onHover);
 
     return () => {
       document.documentElement.style.cursor = '';
+      rootEl.removeEventListener('mouseenter', onEnter);
+      rootEl.removeEventListener('mouseleave', onLeave);
       window.removeEventListener('mousemove', onMove);
       window.removeEventListener('mouseover', onHover);
     };
