@@ -17,27 +17,7 @@
 body { cursor: auto; }
 
 /* Click follower (ripple) */
-#follower {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: #ff66b3; /* pink */
-  pointer-events: none;
-  transform: translate3d(-9999px, -9999px, 0) scale(1);
-  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.25s ease;
-  z-index: 99999;
-  box-shadow: 0 6px 18px rgba(255, 102, 179, 0.12);
-  will-change: transform, opacity;
-}
-
-/* popped state for a quick ripple/pop */
-#follower.follower--pop {
-  transform: translate3d(var(--fx), var(--fy), 0) scale(1.6);
-  opacity: 0.92;
-}
+/* follower removed */
 
 
 
