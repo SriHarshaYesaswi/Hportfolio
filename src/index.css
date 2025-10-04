@@ -13,8 +13,7 @@
   color-scheme: dark;
 }
 
-/* Ensure native cursor is visible by default (restore if previously hidden) */
-body { cursor: auto; }
+/* No explicit body cursor rule — allow user agent / elements to control cursor */
 
 /* Click follower (ripple) */
 /* follower removed */
