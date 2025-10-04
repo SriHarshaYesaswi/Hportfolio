@@ -1,0 +1,2 @@
+- [x] Edit src/constants/index.js to change 'icon: frontend' to 'icon: web' in the services array.
+- [ ] Test the application to ensure the error is resolved.
