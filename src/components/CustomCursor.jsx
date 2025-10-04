@@ -10,9 +10,8 @@ const CustomCursor = ({ color = "#915eff" }) => {
     const ring = ringRef.current;
     if (!dot || !ring) return;
 
-    // hide native cursor
-    const prevCursor = document.body.style.cursor;
-    document.body.style.cursor = "none";
+  // do not change native cursor here
+  const prevCursor = null;
 
     let rafId;
 
@@ -57,7 +56,7 @@ const CustomCursor = ({ color = "#915eff" }) => {
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("mousedown", onDown);
       window.removeEventListener("mouseup", onUp);
-      document.body.style.cursor = prevCursor;
+  // no-op: do not restore cursor here
     };
   }, [color]);
 
