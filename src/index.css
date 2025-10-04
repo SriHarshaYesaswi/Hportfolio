@@ -13,26 +13,8 @@
   color-scheme: dark;
 }
 
-/* Custom cursor variables and helpers */
 :root {
-  --cursor-color: #915eff; /* default purple */
-}
-
-/* When mounted the CustomCursor component will hide the native cursor globally by setting
-   document.documentElement.style.cursor = 'none'. If you prefer CSS-only you can use
-   the `.use-custom-cursor` class on body to hide the native cursor: */
-.use-custom-cursor, .use-custom-cursor * {
-  cursor: none !important;
-}
-
-/* Utility: elements with this class will request a larger cursor */
-.cursor-large {
-  /* no-op; handled in JS but kept for semantic usage */
-}
-
-/* Utility: if you need the native cursor back on a specific element */
-.native-cursor {
-  cursor: auto !important;
+  --cursor-color: #915eff;
 }
 
 .hash-span {
