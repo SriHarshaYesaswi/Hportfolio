@@ -4,7 +4,7 @@ import { projects } from "../constants";
 import { fadeIn, textVariant } from "../utils/motion";
 import { SectionWrapper } from "../hoc";
 
-const ProjectCard = ({ index, icon, name, description, technologies = [], link }) => {
+const ProjectCard = ({ index, icon, name, description, technologies = [] }) => {
   return (
     <motion.div 
       variants={fadeIn("up", "spring", index * 0.2, 0.75)} 
@@ -30,14 +30,7 @@ const ProjectCard = ({ index, icon, name, description, technologies = [], link }
             </span>
           ))}
         </div>
-        <a
-          href={link}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center text-white text-base font-medium hover:text-purple-400 transition-colors"
-        >
-          View Project <span className="ml-2"></span>
-        </a>
+        {/* View Project button removed as requested */}
       </div>
     </motion.div>
   );

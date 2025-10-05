@@ -247,6 +247,8 @@ const socialLinks = {
   github: "https://github.com/SriHarshaYesaswi",
   linkedin: "https://www.linkedin.com/in/ventrapragada-sri-harsha-3b6054316/",
   instagram: "https://www.instagram.com/_.mr_harsha._07/",
+  // primary contact email
+  email: "vshy0708@gmail.com",
 };
 
 export { technologies, skills, certificates, experiences, testimonials, projects, socialLinks };
