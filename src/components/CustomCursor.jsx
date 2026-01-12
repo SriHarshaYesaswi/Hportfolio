@@ -17,6 +17,7 @@ const CustomCursor = () => {
 	const clickScale = useRef(1);
 	const rippleProg = useRef(0);
 	const rippleRef = useRef(null);
+	const sizeRef = useRef(24);
 	const [visible, setVisible] = useState(true);
 	const [isDesktop, setIsDesktop] = useState(() => {
 		if (typeof window === "undefined" || !window.matchMedia) return false;
@@ -36,6 +37,18 @@ const CustomCursor = () => {
 		};
 	}, []);
 
+	// responsive cursor sizing based on viewport width
+	useEffect(() => {
+		if (typeof window === 'undefined') return;
+		const updateSize = () => {
+			// 2% of viewport width, clamped between 16 and 40
+			sizeRef.current = clamp(window.innerWidth * 0.02, 16, 40);
+		};
+		updateSize();
+		window.addEventListener('resize', updateSize);
+		return () => window.removeEventListener('resize', updateSize);
+	}, []);
+
 	useEffect(() => {
 		if (!isDesktop) return undefined;
 		let active = true;
@@ -44,7 +57,17 @@ const CustomCursor = () => {
 		const onMove = (e) => {
 			pos.current.x = e.clientX;
 			pos.current.y = e.clientY;
-			setVisible(true);
+			// hide cursor when over interactive elements (inputs, buttons, links, editable areas)
+			let hide = false;
+			try {
+				const el = e.target && (e.target.nodeType === 1 ? e.target : e.target.parentElement);
+				if (el && el.closest) {
+					hide = !!el.closest('a, button, input, textarea, select, [contenteditable]');
+				}
+			} catch (err) {
+				hide = false;
+			}
+			setVisible(!hide);
 		};
 
 		const onLeave = () => setVisible(false);
@@ -68,6 +91,10 @@ const CustomCursor = () => {
 			if (!active) return;
 			const node = ref.current;
 			if (node) {
+				const s = sizeRef.current;
+				// ensure container size follows responsive value
+				node.style.width = `${s}px`;
+				node.style.height = `${s}px`;
 				// smooth following
 				const lerp = 0.18;
 				lastPos.current.x += (pos.current.x - lastPos.current.x) * lerp;
@@ -92,8 +119,8 @@ const CustomCursor = () => {
 				// click scale lerp back to 1 for a small pulse animation
 				clickScale.current += (1 - clickScale.current) * 0.25;
 
-				// position, rotation & scale
-				node.style.transform = `translate3d(${lastPos.current.x - 12}px, ${lastPos.current.y - 12}px, 0) rotate(${displayAngle}deg) scale(${clickScale.current})`;
+				// position, rotation & scale (offset by half size)
+				node.style.transform = `translate3d(${lastPos.current.x - s / 2}px, ${lastPos.current.y - s / 2}px, 0) rotate(${displayAngle}deg) scale(${clickScale.current})`;
 				node.style.opacity = visible ? "1" : "0";
 
 				// ripple animation (progress 1 -> 0)
@@ -102,11 +129,16 @@ const CustomCursor = () => {
 					rippleProg.current -= 0.06;
 					if (rippleProg.current < 0) rippleProg.current = 0;
 					const t = 1 - rippleProg.current; // 0 -> 1
-					const rScale = 0.6 + t * 2.2;
+					const rSizeBase = sizeRef.current * 2;
+					const t = 1 - rippleProg.current; // 0 -> 1
+					// incoming/shrinking animation: start larger and shrink toward pointer
+					const rScale = 2.8 - t * 2.2; // 2.8 -> 0.6
 					const rOpacity = clamp(rippleProg.current, 0, 1);
 					if (rNode) {
 						rNode.style.transform = `translate(-50%,-50%) scale(${rScale})`;
 						rNode.style.opacity = rOpacity;
+						rNode.style.width = `${rSizeBase}px`;
+						rNode.style.height = `${rSizeBase}px`;
 					}
 				} else if (rNode) {
 					rNode.style.opacity = 0;
