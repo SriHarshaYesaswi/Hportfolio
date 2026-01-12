@@ -7,15 +7,35 @@ import React, { useEffect, useRef, useState } from "react";
 
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
+
 const CustomCursor = () => {
 	const ref = useRef(null);
-	const pos = useRef({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
+	const pos = useRef({ x: typeof window !== "undefined" ? window.innerWidth / 2 : 0, y: typeof window !== "undefined" ? window.innerHeight / 2 : 0 });
 	const lastPos = useRef({ x: pos.current.x, y: pos.current.y });
 	const vel = useRef({ x: 0, y: 0 });
 	const lastAngle = useRef(0);
+	const clickScale = useRef(1);
 	const [visible, setVisible] = useState(true);
+	const [isDesktop, setIsDesktop] = useState(() => {
+		if (typeof window === "undefined" || !window.matchMedia) return false;
+		return window.matchMedia('(pointer: fine) and (hover: hover)').matches;
+	});
 
 	useEffect(() => {
+		// media query watcher for desktop detection
+		if (typeof window === "undefined" || !window.matchMedia) return;
+		const mq = window.matchMedia('(pointer: fine) and (hover: hover)');
+		const mqHandler = (e) => setIsDesktop(e.matches);
+		if (mq.addEventListener) mq.addEventListener('change', mqHandler);
+		else mq.addListener(mqHandler);
+		return () => {
+			if (mq.removeEventListener) mq.removeEventListener('change', mqHandler);
+			else mq.removeListener(mqHandler);
+		};
+	}, []);
+
+	useEffect(() => {
+		if (!isDesktop) return undefined;
 		let active = true;
 		let raf = null;
 
@@ -27,9 +47,19 @@ const CustomCursor = () => {
 
 		const onLeave = () => setVisible(false);
 
+		const onDown = () => {
+			clickScale.current = 0.82;
+		};
+
+		const onUp = () => {
+			// let render loop lerp it back to 1
+		};
+
 		window.addEventListener("mousemove", onMove);
 		window.addEventListener("mouseenter", onMove);
 		window.addEventListener("mouseleave", onLeave);
+		window.addEventListener('mousedown', onDown);
+		window.addEventListener('mouseup', onUp);
 
 		const render = () => {
 			if (!active) return;
@@ -56,8 +86,11 @@ const CustomCursor = () => {
 				}
 				const displayAngle = lastAngle.current;
 
-				// position & rotation
-				node.style.transform = `translate3d(${lastPos.current.x - 12}px, ${lastPos.current.y - 12}px, 0) rotate(${displayAngle}deg)`;
+				// click scale lerp back to 1 for a small pulse animation
+				clickScale.current += (1 - clickScale.current) * 0.25;
+
+				// position, rotation & scale
+				node.style.transform = `translate3d(${lastPos.current.x - 12}px, ${lastPos.current.y - 12}px, 0) rotate(${displayAngle}deg) scale(${clickScale.current})`;
 				node.style.opacity = visible ? "1" : "0";
 			}
 			raf = requestAnimationFrame(render);
@@ -71,8 +104,10 @@ const CustomCursor = () => {
 			window.removeEventListener("mousemove", onMove);
 			window.removeEventListener("mouseenter", onMove);
 			window.removeEventListener("mouseleave", onLeave);
+			window.removeEventListener('mousedown', onDown);
+			window.removeEventListener('mouseup', onUp);
 		};
-	}, [visible]);
+	}, [visible, isDesktop]);
 
 	return (
 		<div
