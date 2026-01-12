@@ -15,6 +15,8 @@ const CustomCursor = () => {
 	const vel = useRef({ x: 0, y: 0 });
 	const lastAngle = useRef(0);
 	const clickScale = useRef(1);
+	const rippleProg = useRef(0);
+	const rippleRef = useRef(null);
 	const [visible, setVisible] = useState(true);
 	const [isDesktop, setIsDesktop] = useState(() => {
 		if (typeof window === "undefined" || !window.matchMedia) return false;
@@ -49,6 +51,7 @@ const CustomCursor = () => {
 
 		const onDown = () => {
 			clickScale.current = 0.82;
+			rippleProg.current = 1; // start ripple (1 -> 0)
 		};
 
 		const onUp = () => {
@@ -92,6 +95,22 @@ const CustomCursor = () => {
 				// position, rotation & scale
 				node.style.transform = `translate3d(${lastPos.current.x - 12}px, ${lastPos.current.y - 12}px, 0) rotate(${displayAngle}deg) scale(${clickScale.current})`;
 				node.style.opacity = visible ? "1" : "0";
+
+				// ripple animation (progress 1 -> 0)
+				const rNode = rippleRef.current;
+				if (rippleProg.current > 0) {
+					rippleProg.current -= 0.06;
+					if (rippleProg.current < 0) rippleProg.current = 0;
+					const t = 1 - rippleProg.current; // 0 -> 1
+					const rScale = 0.6 + t * 2.2;
+					const rOpacity = clamp(rippleProg.current, 0, 1);
+					if (rNode) {
+						rNode.style.transform = `translate(-50%,-50%) scale(${rScale})`;
+						rNode.style.opacity = rOpacity;
+					}
+				} else if (rNode) {
+					rNode.style.opacity = 0;
+				}
 			}
 			raf = requestAnimationFrame(render);
 		};
@@ -108,6 +127,8 @@ const CustomCursor = () => {
 			window.removeEventListener('mouseup', onUp);
 		};
 	}, [visible, isDesktop]);
+
+	if (!isDesktop) return null;
 
 	return (
 		<div
@@ -126,6 +147,22 @@ const CustomCursor = () => {
 			}}
 			className="custom-cursor"
 		>
+			<div
+				ref={rippleRef}
+				style={{
+					position: 'absolute',
+					left: '50%',
+					top: '50%',
+					width: 48,
+					height: 48,
+					borderRadius: '50%',
+					border: '2px solid rgba(145,94,255,0.95)',
+					transform: 'translate(-50%,-50%) scale(0.6)',
+					opacity: 0,
+					pointerEvents: 'none',
+				}}
+				className="cursor-ripple"
+			/>
 			<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 				<path d="M2 2 L22 12 L2 22 Z" fill="rgba(255,255,255,0.95)" stroke="rgba(145,94,255,0.95)" strokeWidth="0.8" />
 			</svg>
