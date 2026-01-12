@@ -12,6 +12,7 @@ const CustomCursor = () => {
 	const pos = useRef({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
 	const lastPos = useRef({ x: pos.current.x, y: pos.current.y });
 	const vel = useRef({ x: 0, y: 0 });
+	const lastAngle = useRef(0);
 	const [visible, setVisible] = useState(true);
 
 	useEffect(() => {
@@ -48,9 +49,12 @@ const CustomCursor = () => {
 				// angle in degrees (face direction of movement)
 				const angle = Math.atan2(vel.current.y, vel.current.x) * (180 / Math.PI);
 
-				// reduce jitter when almost stationary
+				// reduce jitter when almost stationary — preserve last angle when stopped
 				const speed = Math.hypot(vel.current.x, vel.current.y);
-				const displayAngle = speed > 0.6 ? angle : 0;
+				if (speed > 0.6) {
+					lastAngle.current = angle;
+				}
+				const displayAngle = lastAngle.current;
 
 				// position & rotation
 				node.style.transform = `translate3d(${lastPos.current.x - 12}px, ${lastPos.current.y - 12}px, 0) rotate(${displayAngle}deg)`;
