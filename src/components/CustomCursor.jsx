@@ -128,9 +128,7 @@ const CustomCursor = () => {
 				if (rippleProg.current > 0) {
 					rippleProg.current -= 0.06;
 					if (rippleProg.current < 0) rippleProg.current = 0;
-					const t = 1 - rippleProg.current; // 0 -> 1
 					const rSizeBase = sizeRef.current * 2;
-					const t = 1 - rippleProg.current; // 0 -> 1
 					// incoming/shrinking animation: start larger and shrink toward pointer
 					const rScale = 2.8 - t * 2.2; // 2.8 -> 0.6
 					const rOpacity = clamp(rippleProg.current, 0, 1);
@@ -171,8 +169,7 @@ const CustomCursor = () => {
 				top: 0,
 				left: 0,
 				pointerEvents: "none",
-				width: 24,
-				height: 24,
+				// size is set dynamically in the RAF loop for responsiveness
 				transform: "translate3d(-50%, -50%, 0)",
 				transition: "opacity 160ms linear, transform 100ms linear",
 				zIndex: 9999,
