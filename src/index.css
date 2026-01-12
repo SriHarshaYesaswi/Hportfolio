@@ -21,6 +21,27 @@
   will-change: transform, opacity;
 }
 
+/* Inner shape that animates independently from the outer container */
+.custom-cursor .cursor-shape {
+  width: 100%;
+  height: 100%;
+  display: inline-block;
+  transform-origin: center;
+  will-change: transform, opacity;
+  transition: transform 120ms cubic-bezier(.2,.9,.2,1), opacity 120ms linear;
+}
+
+/* Idle animation: gentle bob + subtle pulse */
+.cursor-shape.cursor-idle {
+  animation: cursor-bob 2.8s ease-in-out infinite;
+}
+
+@keyframes cursor-bob {
+  0% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-4px) scale(1.02); }
+  100% { transform: translateY(0) scale(1); }
+}
+
 /* Hide native cursor when custom cursor is present */
 /* Force-hide the native cursor everywhere (including form controls) so only the custom pointer is visible */
 html, body, #root, * {
