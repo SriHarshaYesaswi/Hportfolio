@@ -102,7 +102,8 @@ const CustomCursor = () => {
 					rippleProg.current -= 0.06;
 					if (rippleProg.current < 0) rippleProg.current = 0;
 					const t = 1 - rippleProg.current; // 0 -> 1
-					const rScale = 0.6 + t * 2.2;
+					// incoming animation: start larger and shrink toward the pointer
+					const rScale = 2.8 - t * 2.2; // 2.8 -> 0.6
 					const rOpacity = clamp(rippleProg.current, 0, 1);
 					if (rNode) {
 						rNode.style.transform = `translate(-50%,-50%) scale(${rScale})`;
