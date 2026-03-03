@@ -119,9 +119,61 @@ const certificates = [
     date: "Sept 2025",
     description: "Participated in the Gen AI Hackathon conducted by Vignan engineering college for women vizag GDG.Worked on developing Chatbot for Agriculture which can also scan the crops and identify the diseases.",
   },
+  {
+    title: "Google Student Ambassador Program",
+    issuer: "Google",
+    date: "June 2025 - Dec 2025",
+    description: "Selected as a Google Student Ambassador, representing Google on campus and leading initiatives to promote technology and community engagement.",
+  },
+  {
+    title: "Full Stack Web Development",
+    issuer: "Robo Couplers",
+    date: "July 2025 - Nov 2025",
+    description: "Completed a comprehensive full stack web development course covering frontend and backend technologies, database management, and deployment strategies.",
+  },
 ];
 
 const experiences = [
+  {
+    title: "Participant",
+    company_name: "IIT tirupathi Idea Sprint - National Innovation Challenge",
+    icon: creator,
+    iconBg: "#06B6D4",
+    date: "Jan 2026",
+    points: [
+      "Participated in the Idea Sprint organized by IIC Tirupathi, where I developed and pitched innovative solutions to real-world problems, demonstrating creativity and problem-solving skills."
+    ],
+  },
+  {
+    title: "Participant",
+    company_name: "Runway AI By RITH",
+    icon: creator,
+    iconBg: "#06B6D4",
+    date: "Dec 2025", 
+    points: [
+      "Participated in the Runway AI Hackathon organized by RITH, where I collaborated with a team to develop innovative AI solutions, showcasing creativity and technical skills in a competitive environment."
+    ],
+  },
+  {
+    title: "Volunteer",
+    company_name: "Google DevFest 2K26",
+    icon: freelance,
+    iconBg: "#FF7A59",
+    date: "Nov 2025",
+    points: [
+      "Volunteered at Google DevFest 2K26, assisting with event logistics, session coordination, and attendee engagement for a major tech conference."
+    ],
+  },
+  {
+    title: "Full Stack Web Development Intern", 
+    company_name: "Robo Couplers",
+    icon: shopify,
+    iconBg: "#D38312",
+    date: "July 2025 - Nov 2025",
+    points: [
+      "Completed a comprehensive full stack web development internship covering frontend and backend technologies, database management, and deployment strategies."
+    ],
+  },
   {
     title: "Marketing and Strategy Lead",
     company_name: "GDG On Campus REC",
@@ -141,26 +193,6 @@ const experiences = [
     date: "Sept 2025",
     points: [
       "Participated in the Gen AI Hackathon conducted by Vignan engineering college for women vizag GDG.",
-    ],
-  },
-  {
-    title: "Vizag Volunteer",
-    company_name: "F9 technologies",
-    icon: freelance,
-    iconBg: "#FF7A59",
-    date: "April 2025 - Present",
-    points: [
-      "Volunteered in community service initiatives organized by Vizag Volunteer Association to support local causes and events."
-    ],
-  },
-  {
-    title: "Data Science Intern",
-    company_name: "Kalam Dream Labs",
-    icon: shopify,
-    iconBg: "#D38312",
-    date: "March 2025 - July 2025",
-    points: [
-      "Worked on data analysis and machine learning projects to gain hands-on experience in data science methodologies."
     ],
   },
   {

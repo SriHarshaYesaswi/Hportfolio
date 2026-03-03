@@ -34,16 +34,32 @@ const CertificateCard = ({ index, title, issuer, date, description }) => (
 const Certificates = () => {
   return (
     <div className="mt-12 bg-black-100 rounded-[20px]">
-      <div className={`bg-tertiary rounded-2xl ${styles.padding} min-h-[300px]`}>
+      <div className={`bg-tertiary rounded-2xl ${styles.padding} min-h-[150px]`}>
         <motion.div variants={textVariant()}>
           <p className={styles.sectionSubText}>Recognition and Achievement</p>
           <h2 className={styles.sectionHeadText}>Certificates.</h2>
         </motion.div>
       </div>
-      <div className={`-mt-20 pb-14 ${styles.paddingX} flex flex-wrap gap-7`}>
-        {certificates.map((certificate, index) => (
-          <CertificateCard key={certificate.title} index={index} {...certificate} />
-        ))}
+
+      <div className={`-mt-20 pb-14 ${styles.paddingX}`}>
+        {certificates && certificates.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {certificates.map((cert, idx) => (
+              <motion.div
+                key={cert.title}
+                variants={fadeIn("up", "spring", idx * 0.15, 0.6)}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, amount: 0.2 }}
+                className="w-full"
+              >
+                <CertificateCard index={idx} {...cert} />
+              </motion.div>
+            ))}
+          </div>
+        ) : (
+          <div className="w-full bg-black-200 p-6 rounded-2xl text-secondary">No certificates available.</div>
+        )}
       </div>
     </div>
   );

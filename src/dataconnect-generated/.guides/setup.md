@@ -42,21 +42,15 @@ const firebaseConfig = {
   /* your config here. To generate this, you can use the `firebase_sdk_config` MCP tool */
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+# Setup
 
-// Create a TanStack Query client instance
-const queryClient = new QueryClient();
+This generated SDK does not require Firebase to function in this project. To use the SDK from your application, install it and import the exported functions:
 
-function App() {
-  return (
-    // Provide the client to your App
-    <QueryClientProvider client={queryClient}>
-      <MyApplication />
-    </QueryClientProvider>
-  )
-}
-
-render(<App />, document.getElementById('root'));
+```ts
+import { /* exported symbols */ } from '@dataconnect/generated';
 ```
 
+If your application integrates additional libraries (for example, TanStack Query), install and configure them according to their documentation. If you previously followed instructions that referenced Firebase setup, those steps are optional and not required for the bundled SDK to work with local data sources.
+    <QueryClientProvider client={queryClient}>
+
+      <MyApplication />

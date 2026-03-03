@@ -22,6 +22,7 @@ import {
   macbookpro,
   falverra,
   tripguide,
+  carrent,
   threejs,
 } from "../assets";
 
@@ -97,10 +98,95 @@ const certificates = [
     issuer: "GitHub",
     date: "2024",
     description: "Version control fundamentals and collaborative development practices."
-  }
+  },
+    {
+    title: "GDG On Campus REC",
+    issuer: "Google Developer Groups",
+    date: "September 2024 - July 2025",
+    description: "Active member of GDG On Campus REC, contributing to community building and organizing tech events."
+  },
+  {
+    title: "TVS Credit EPIC 7.0 - IT Challenge",
+    issuer: "Unstop",
+    date: "Sept 2025",
+    description: "Participated in TVS Credit EPIC 7.0 - IT Challenge."
+  },
+  {
+    title: "Google Student Ambassador Program",
+    issuer: "Google",
+    date: "June 2025 - Dec 2025",
+    description: "Selected as a Google Student Ambassador, representing Google on campus and leading initiatives to promote technology and community engagement."
+  },
+  {
+    title: "Full Stack Web Development",
+    issuer: "Robo Couplers",
+    date: "July 2025 - Nov 2025",
+    description: "Completed a comprehensive full stack web development course covering frontend and backend technologies, database management, and deployment strategies."
+  },
+  {
+    title: "Google DevFest 2K26",
+    issuer: "Google Developer Groups",
+    date: "Nov 2025",
+    description: "Volunteered at Google DevFest 2K26, assisting with event logistics, session coordination, and attendee engagement for a major tech conference."   
+  },
+  {
+    title: "Idea Sprint - National Innovation Challenge",
+    issuer: "IIC Tirupathi",
+    date: "Jan 2026",
+    description: "Participated in the Idea Sprint organized by IIC Tirupathi, where I developed and pitched innovative solutions to real-world problems, demonstrating creativity and problem-solving skills."
+  },
+  {
+    title: "DIGITAL SKILLS: USER EXPERIENCE",
+    issuer: "Accenture",
+    date: "March 2026",
+    description: "Completed the Digital Skills: User Experience course by Accenture, gaining knowledge in UX design principles, user research, wireframing, and prototyping to create user-centered digital experiences."
+  },
+
+
+
 ];
 
 const experiences = [
+  {
+    title: "Participant",
+    company_name: "IIT tirupathi Idea Sprint - National Innovation Challenge",
+    icon: creator,
+    iconBg: "#06B6D4",
+    date: "Jan 2026",
+    points: [
+      "Participated in the Idea Sprint organized by IIC Tirupathi, where I developed and pitched innovative solutions to real-world problems, demonstrating creativity and problem-solving skills."
+    ],
+  },
+  {
+    title: "Participant",
+    company_name: "Runway AI By RITH",
+    icon: creator,
+    iconBg: "#06B6D4",
+    date: "Dec 2025", 
+    points: [
+      "Participated in the Runway AI Hackathon organized by RITH, where I collaborated with a team to develop innovative AI solutions, showcasing creativity and technical skills in a competitive environment."
+    ],
+  },
+  {
+    title: "Volunteer",
+    company_name: "Google DevFest 2K26",
+    icon: freelance,
+    iconBg: "#FF7A59",
+    date: "Nov 2025",
+    points: [
+      "Volunteered at Google DevFest 2K26, assisting with event logistics, session coordination, and attendee engagement for a major tech conference."
+    ],
+  },
+  {
+    title: "Full Stack Web Development Intern", 
+    company_name: "Robo Couplers",
+    icon: shopify,
+    iconBg: "#D38312",
+    date: "July 2025 - Nov 2025",
+    points: [
+      "Completed a comprehensive full stack web development internship covering frontend and backend technologies, database management, and deployment strategies."
+    ],
+  },
   {
     title: "Marketing and Strategy Lead",
     company_name: "GDG On Campus REC",
@@ -238,35 +324,3 @@ const projects = [
 ];
 
 export { services, technologies, skills, certificates, experiences, testimonials, projects };
-const certificates = [
-  {
-    title: "Ideathon 2.0",
-    issuer: "E-CELL_REC",
-    date: "June 2024",
-    description: "A user-friendly hub that bridges the gap for both literate and illiterate homemakers, providing learning resources, guided navigation, and tools for personal growth and re-entry into the workforce."
-  },
-  {
-    title: "Hands On With AI: From Concept To Creation",
-    issuer: "GDG On Campus REC",
-    date: "Nov 2024",
-    description: "Hands-on with AI: From Concept to Creation was a workshop by GDG on Campus REC where participants went from ideation to building AI models and deploying real-world solutions."
-  },
-  {
-    title: "Google Cloud Skills Boost",
-    issuer: "Google",
-    date: "June 2025",
-    description: "I gained hands-on experience with Google Cloud services, including computing, storage, and networking. I also learned to deploy applications, manage cloud resources, and use tools like BigQuery and Cloud Functions."
-  },
-  {
-    title: "GDG Vizag's DevFest 2024",
-    issuer: "Google Developer Groups",
-    date: "Dec 2024",
-    description: "Volunteered at DevFest Vizag 2024, supporting event operations, audience engagement, and session coordination for a large-scale tech conference."
-  },
-  {
-    title: "AI Immersion Week Program",
-    issuer: "CII-HP Centre For AI",
-    date: "March 2025",
-    description: "Participated in the AI Immersion Week Workshop conducted by CII-HP Centre for AI and upGrad Enterprise, focused on hands-on learning in Artificial Intelligence"
-  }
-];
