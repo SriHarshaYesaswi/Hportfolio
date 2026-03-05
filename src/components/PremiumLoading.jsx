@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
-export default function PremiumLoading({ navigateAfter = true, timeout = 4000 }) {
+export default function PremiumLoading({ navigateAfter = true, timeout = 4000, onDone }) {
   const [show, setShow] = useState(true);
   const [phase, setPhase] = useState("logo"); // "logo" then "text"
   const navigate = useNavigate();
@@ -25,21 +25,26 @@ export default function PremiumLoading({ navigateAfter = true, timeout = 4000 })
   }, [timeout]);
 
   useEffect(() => {
-    if (!show && navigateAfter) {
-      const navTimer = setTimeout(() => navigate("/home"), 650);
-      return () => clearTimeout(navTimer);
+    if (!show) {
+      if (navigateAfter) {
+        const navTimer = setTimeout(() => navigate("/home"), 650);
+        return () => clearTimeout(navTimer);
+      }
+      if (onDone) {
+        onDone();
+      }
     }
-  }, [show, navigateAfter, navigate]);
+  }, [show, navigateAfter, navigate, onDone]);
 
   return (
     <AnimatePresence>
       {show && (
         <motion.div
           key="premium-loading"
-          initial={{ opacity: 0 }}
+          initial={{ opacity: 1 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0, transition: { duration: 0.6 } }}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black"
+          className="fixed inset-0 z-[99999] flex items-center justify-center bg-black"
           style={{ backgroundColor: "#000000" }}
         >
           {/* subtle radial glow backdrop */}
@@ -74,6 +79,22 @@ export default function PremiumLoading({ navigateAfter = true, timeout = 4000 })
                   filter: "blur(24px)",
                   position: "absolute",
                   zIndex: -1,
+                }}
+              />
+
+              {/* Expanding violet circle ring from the logo */}
+              <motion.div
+                layout
+                initial={{ scale: 0.5, opacity: 0 }}
+                animate={{ scale: 3.5, opacity: [0, 0.8, 0] }}
+                transition={{ duration: 1.4, ease: "easeOut", delay: 0.2 }}
+                style={{
+                  width: 140,
+                  height: 140,
+                  borderRadius: 9999,
+                  border: "2px solid #8B5CF6", // Violet
+                  position: "absolute",
+                  zIndex: -2,
                 }}
               />
 
@@ -114,7 +135,10 @@ export default function PremiumLoading({ navigateAfter = true, timeout = 4000 })
                 >
                   <motion.h1
                     className="text-white text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight whitespace-nowrap"
-                    style={{ fontFeatureSettings: '"kern" 1' }}
+                    style={{
+                      fontFamily: '"AvantGarde Md BT", "Avant Garde", "Century Gothic", sans-serif',
+                      fontFeatureSettings: '"kern" 1'
+                    }}
                   >
                     Welcome to my world
                   </motion.h1>
