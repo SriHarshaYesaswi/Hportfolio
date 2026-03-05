@@ -128,7 +128,17 @@ const CustomCursor = () => {
 		};
 	}, [visible, isDesktop]);
 
-	if (!isDesktop) return null;
+	const [hasLoaded, setHasLoaded] = useState(false);
+
+	useEffect(() => {
+		// Wait 5400ms for the PremiumLoading to finish (timeout 4000 + 1400)
+		const timer = setTimeout(() => {
+			setHasLoaded(true);
+		}, 5400);
+		return () => clearTimeout(timer);
+	}, []);
+
+	if (!isDesktop || !hasLoaded) return null;
 
 	return (
 		<div
