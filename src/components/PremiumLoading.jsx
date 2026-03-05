@@ -134,30 +134,25 @@ export default function PremiumLoading({ navigateAfter = true, timeout = 4000, o
                   className="mt-4 md:mt-0 text-center md:text-left overflow-hidden flex flex-col justify-center"
                 >
                   <motion.h1
-                    className="text-white text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight whitespace-nowrap"
+                    className="text-transparent bg-clip-text text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight whitespace-nowrap"
                     style={{
                       fontFamily: '"AvantGarde Md BT", "Avant Garde", "Century Gothic", sans-serif',
-                      fontFeatureSettings: '"kern" 1'
+                      fontFeatureSettings: '"kern" 1',
+                      backgroundImage: "linear-gradient(110deg, #ffffff 40%, #8B5CF6 50%, #8B5CF6 52%, #ffffff 62%)",
+                      backgroundSize: "250% 100%",
+                      WebkitBackgroundClip: "text",
+                    }}
+                    initial={{ backgroundPosition: "150% center" }}
+                    animate={{ backgroundPosition: "-150% center" }}
+                    transition={{
+                      duration: 2.5,
+                      repeat: Infinity,
+                      ease: "linear",
+                      delay: 0.5
                     }}
                   >
                     Welcome to my world
                   </motion.h1>
-
-                  <motion.div
-                    className="mt-3 h-1 w-full rounded-full origin-left relative overflow-hidden"
-                    initial={{ scaleX: 0 }}
-                    animate={{ scaleX: 1, transition: { duration: 0.8, delay: 0.3, ease: "easeOut" } }}
-                    style={{
-                      background: "linear-gradient(90deg,#8B5CF6,#6D28D9)",
-                    }}
-                  >
-                    <motion.div
-                      className="absolute inset-0 bg-white"
-                      initial={{ opacity: 0.8, x: "-100%" }}
-                      animate={{ opacity: 0, x: "100%" }}
-                      transition={{ duration: 1.5, delay: 0.7, repeat: Infinity, repeatDelay: 1 }}
-                    />
-                  </motion.div>
                 </motion.div>
               )}
             </AnimatePresence>
