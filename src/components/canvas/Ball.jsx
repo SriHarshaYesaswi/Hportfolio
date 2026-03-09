@@ -7,7 +7,7 @@ import {
 } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 
 const Ball = (props) => {
   const optimizedUrl = `${props.imgUrl}${props.imgUrl.includes("?") ? "&" : "?"}tr=f-auto`;
@@ -38,10 +38,24 @@ const Ball = (props) => {
 
 
 const BallCanvas = ({ icon }) => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width:640px)");
+    setIsMobile(mediaQuery.matches);
+
+    const handleMediaQueryChange = (event) => {
+      setIsMobile(event.matches);
+    };
+
+    mediaQuery.addEventListener("change", handleMediaQueryChange);
+    return () => mediaQuery.removeEventListener("change", handleMediaQueryChange);
+  }, []);
+
   return (
     <Canvas frameloop="demand" gl={{ preserveDrawingBuffer: true }}>
       <Suspense>
-        <OrbitControls enableZoom={false} />
+        <OrbitControls enableZoom={false} enableRotate={!isMobile} />
         <Ball imgUrl={icon} />
       </Suspense>
       <Preload all />

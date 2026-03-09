@@ -33,7 +33,7 @@ const CertificateCard = ({ index, title, issuer, date, description }) => (
 
 const Certificates = () => {
   return (
-    <div className="mt-12 bg-black-100 rounded-[20px]">
+    <div className="mt-12 bg-black-100 rounded-[20px] relative z-10">
       <div className={`bg-tertiary rounded-2xl ${styles.padding} min-h-[150px]`}>
         <motion.div variants={textVariant()}>
           <p className={styles.sectionSubText}>Recognition and Achievement</p>
@@ -41,7 +41,7 @@ const Certificates = () => {
         </motion.div>
       </div>
 
-      <div className={`-mt-20 pb-14 ${styles.paddingX}`}>
+      <div className={`sm:-mt-20 mt-0 pb-14 ${styles.paddingX}`}>
         {certificates && certificates.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {certificates.map((cert, idx) => (
