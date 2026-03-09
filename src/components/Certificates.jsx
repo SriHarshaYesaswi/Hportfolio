@@ -3,16 +3,19 @@ import { motion } from "framer-motion";
 import { styles } from "../styles";
 import { certificates } from "../constants";
 import { SectionWrapper } from "../hoc";
-import { fadeIn, textVariant } from "../utils/motion";
+import { textVariant } from "../utils/motion";
 
 const CertificateCard = ({ index, title, issuer, date, description }) => (
   <motion.div
-    variants={fadeIn("up", "spring", index * 0.5, 0.75)}
-    className="bg-black-200 p-10 rounded-3xl xs:w-[320px] w-full"
+    initial={{ opacity: 0, y: 40 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    transition={{ type: "spring", delay: index * 0.1, duration: 0.6 }}
+    viewport={{ once: true, amount: 0.05 }}
+    className="bg-black-200 p-8 rounded-3xl w-full"
   >
     <div className="mt-1">
       <p className="text-white tracking-wider text-[18px] font-bold">{title}</p>
-      <div className="mt-7 flex justify-between items-center gap-1">
+      <div className="mt-4 flex justify-between items-center gap-1">
         <div className="flex-1 flex flex-col">
           <p className="text-white font-medium text-[16px]">
             <span className="blue-text-gradient">@</span> {issuer}
@@ -41,20 +44,11 @@ const Certificates = () => {
         </motion.div>
       </div>
 
-      <div className={`sm:-mt-20 mt-0 pb-14 ${styles.paddingX}`}>
+      <div className={`mt-4 pb-14 ${styles.paddingX}`}>
         {certificates && certificates.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {certificates.map((cert, idx) => (
-              <motion.div
-                key={cert.title}
-                variants={fadeIn("up", "spring", idx * 0.15, 0.6)}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, amount: 0.2 }}
-                className="w-full"
-              >
-                <CertificateCard index={idx} {...cert} />
-              </motion.div>
+              <CertificateCard key={cert.title + idx} index={idx} {...cert} />
             ))}
           </div>
         ) : (

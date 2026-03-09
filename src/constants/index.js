@@ -26,10 +26,10 @@ import {
 } from "../assets";
 
 export const navLinks = [
-  { id: "about", title: "About" },
-  { id: "work", title: "experience" },
-  { id: "skills", title: "skills" },
-  { id: "contact", title: "Contact" },
+  { id: "About", title: "About" },
+  { id: "Experience", title: "Experience" },
+  { id: "Skills", title: "Skills" },
+  { id: "Contact", title: "Contact" },
 ];
 
 // Removed services array
@@ -72,6 +72,12 @@ const skills = [
 
 const certificates = [
   {
+    title: "Participant",
+    issuer: "IIT tirupathi Idea Sprint - National Innovation Challenge",
+    date: "Jan 2026",
+    description: "Participated in the Idea Sprint organized by IIC Tirupathi, where I developed and pitched innovative solutions to real-world problems, demonstrating creativity and problem-solving skills.",
+  },
+  {
     title: "Ideathon 2.0",
     issuer: "IIC REC",
     date: "June 2024",
@@ -105,9 +111,9 @@ const certificates = [
     title: "Google Cloud Skill Boost",
     issuer: "Google",
     date: "May 2025",
-    description:"Achieved Diamond League in Google Cloud Skill Boost, demonstrating expertise in cloud technologies including APIs, Cloud Storage, Compute Engine, and Buckets. Recognized for hands-on skills in designing, deploying, and managing scalable cloud solutions.",
+    description: "Achieved Diamond League in Google Cloud Skill Boost, demonstrating expertise in cloud technologies including APIs, Cloud Storage, Compute Engine, and Buckets. Recognized for hands-on skills in designing, deploying, and managing scalable cloud solutions.",
   },
-  { 
+  {
     title: "Outreach Co-ordinator",
     issuer: "GDG On Campus REC",
     date: "Oct 2024 - July 2025",
@@ -149,7 +155,7 @@ const experiences = [
     company_name: "Runway AI By RITH",
     icon: creator,
     iconBg: "#06B6D4",
-    date: "Dec 2025", 
+    date: "Dec 2025",
     points: [
       "Participated in the Runway AI Hackathon organized by RITH, where I collaborated with a team to develop innovative AI solutions, showcasing creativity and technical skills in a competitive environment."
     ],
@@ -165,7 +171,7 @@ const experiences = [
     ],
   },
   {
-    title: "Full Stack Web Development Intern", 
+    title: "Full Stack Web Development Intern",
     company_name: "Robo Couplers",
     icon: shopify,
     iconBg: "#D38312",
@@ -271,6 +277,22 @@ const projects = [
     description:
       "A multi-featured web application built during the International Women's Day Hackathon to empower girls and women across four critical areas: safety, education, economic development, and healthcare.",
     technologies: ["HTML", "CSS", "Firebase", "javascript"],
+    link: "#"
+  },
+  {
+    icon: "⚖️",
+    name: "LegalDocxVerifier - AI Contract Review System",
+    description:
+      "An AI chatbot built to help legal teams with slow and error-prone contract reviews. Using RAG, it extracts key clauses, detects risks, and generates clear summaries. The pipeline includes document ingestion, text chunking, embeddings, and vector search for context-based LLM responses.",
+    technologies: ["Langchain", "Chroma DB", "Ollama", "RAG"],
+    link: "https://github.com/SriHarshaYesaswi/LegalDocxVerifier.git"
+  },
+  {
+    icon: "📦",
+    name: "Robo Couplers Stock Management System",
+    description:
+      "A comprehensive web application designed for adding and updating Robo Couplers products. Users can efficiently track and manage item details, including product names, quantities, costs, and current stock status (in-stock or out-of-stock).",
+    technologies: ["React", "PHP", "PostgreSQL"],
     link: "#"
   }
 ];
