@@ -133,19 +133,6 @@ export default function PremiumLoading({ navigateAfter = true, timeout = 4000, o
                   exit={{ opacity: 0, x: -20 }}
                   className="mt-4 md:mt-0 text-center md:text-left overflow-visible flex flex-col justify-center items-center md:items-start"
                 >
-                  {/* Blue Dragon */}
-                  <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
-                    style={{
-                      display: "inline-block",
-                      fontSize: "2.8rem",
-                      filter: "drop-shadow(0 0 12px #3b82f6) drop-shadow(0 0 28px #60a5fa) drop-shadow(0 0 6px #1d4ed8)",
-                      marginBottom: "0.5rem",
-                    }}
-                  >
-                    🐉
-                  </motion.div>
 
                   <motion.h1
                     className="text-transparent bg-clip-text text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight whitespace-nowrap"
