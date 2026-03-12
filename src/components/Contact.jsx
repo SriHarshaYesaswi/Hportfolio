@@ -4,10 +4,9 @@ import { styles } from "../styles";
 import { EarthCanvas } from "./canvas";
 import { slideIn } from "../utils/motion";
 import { SectionWrapper } from "../hoc";
-// The frontend now posts contact messages to the backend API
 import { FaGithub, FaLinkedin, FaInstagram, FaTwitter } from "react-icons/fa";
 import { socialLinks } from "../constants";
-// Firebase removed: RTDB writes disabled
+import { supabase } from "../supabaseClient";
 
 
 // template_49jw5yq
@@ -26,28 +25,23 @@ const Contact = () => {
     const { name, value } = e.target;
     setform({ ...form, [name]: value });
   };
-  const handlesubmit = (e) => {
+  const handlesubmit = async (e) => {
     e.preventDefault();
     setloading(true);
-    (async () => {
-      const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:4000";
-      try {
-        const res = await fetch(`${API_BASE}/api/contact`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(form),
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || "Request failed");
-        alert("Thank you. I will get back to you as soon as possible");
-        setform({ name: "", email: "", message: "" });
-      } catch (err) {
-        console.error(err);
-        alert("Something went wrong.");
-      } finally {
-        setloading(false);
-      }
-    })();
+
+    const { error } = await supabase
+      .from("contacts")
+      .insert([{ name: form.name, email: form.email, message: form.message }]);
+
+    if (error) {
+      console.error(error);
+      alert("Something went wrong. Please try again.");
+    } else {
+      alert("Thank you! I will get back to you as soon as possible.");
+      setform({ name: "", email: "", message: "" });
+    }
+
+    setloading(false);
   };
   return (
     <div className="xl:mt-12 xl:flex-row flex-col-reverse flex gap-10 overflow-hidden">
