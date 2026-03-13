@@ -22,7 +22,7 @@ const Contact = () => {
     message: "",
   });
   const [loading, setloading] = useState(false);
-  const [file, setfile] = useState(null);
+  const [files, setfiles] = useState([]);
   const [showFileOptions, setShowFileOptions] = useState(false);
   const [fileAccept, setFileAccept] = useState("*/*");
 
@@ -43,9 +43,21 @@ const Contact = () => {
   };
 
   const handleFileChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      setfile(e.target.files[0]);
+    if (e.target.files) {
+      const newFiles = Array.from(e.target.files);
+      setfiles((prev) => {
+        const totalFiles = [...prev, ...newFiles];
+        if (totalFiles.length > 10) {
+          alert("You can only attach a maximum of 10 files.");
+          return totalFiles.slice(0, 10);
+        }
+        return totalFiles;
+      });
     }
+  };
+
+  const removeFile = (indexToRemove) => {
+    setfiles(files.filter((_, index) => index !== indexToRemove));
   };
   const handlechange = (e) => {
     const { name, value } = e.target;
@@ -55,19 +67,23 @@ const Contact = () => {
     e.preventDefault();
     setloading(true);
 
-    let attachmentUrl = null;
-    if (file) {
+    let uploadedUrls = [];
+    if (files.length > 0) {
       // Uploading to Supabase Storage bucket named 'uploads'
-      const fileName = `${Date.now()}_${file.name}`;
-      const { data: uploadData, error: uploadError } = await supabase.storage
-        .from("uploads")
-        .upload(fileName, file);
+      for (const fileItem of files) {
+        const fileName = `${Date.now()}_${fileItem.name}`;
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from("uploads")
+          .upload(fileName, fileItem);
 
-      if (!uploadError) {
-        const { data: publicUrlData } = supabase.storage.from("uploads").getPublicUrl(fileName);
-        attachmentUrl = publicUrlData?.publicUrl;
-      } else {
-        console.warn("File upload failed. Trying to proceed anyway:", uploadError);
+        if (!uploadError) {
+          const { data: publicUrlData } = supabase.storage.from("uploads").getPublicUrl(fileName);
+          if (publicUrlData?.publicUrl) {
+            uploadedUrls.push(publicUrlData.publicUrl);
+          }
+        } else {
+          console.warn(`File upload failed for ${fileItem.name}:`, uploadError);
+        }
       }
     }
 
@@ -77,7 +93,7 @@ const Contact = () => {
         name: form.name, 
         email: form.email, 
         message: form.message,
-        file_url: attachmentUrl || null 
+        file_url: uploadedUrls.length > 0 ? uploadedUrls.join(", ") : null 
       }]);
 
     if (error) {
@@ -86,7 +102,7 @@ const Contact = () => {
     } else {
       alert("Thank you! I will get back to you as soon as possible.");
       setform({ name: "", email: "", message: "" });
-      setfile(null);
+      setfiles([]);
     }
 
     setloading(false);
@@ -144,18 +160,22 @@ const Contact = () => {
           <div className="flex flex-col relative w-fit">
             <span className="text-white font-medium mb-4">Attachment (Optional)</span>
             
-            <div className="flex items-center gap-4">
+            <div className="flex flex-col gap-4">
               <button
                 type="button"
                 onClick={() => setShowFileOptions(!showFileOptions)}
                 className="bg-tertiary py-3 px-6 rounded-lg outline-none w-fit text-white font-medium flex items-center gap-2 hover:bg-[#2a234a] hover:shadow-lg transition-all"
               >
-                <FaPaperclip /> {file ? "Change File" : "Attach File"}
+                <FaPaperclip /> {files.length > 0 ? "Attach More Files" : "Attach File"}
               </button>
-              {file && (
-                <div className="flex items-center gap-2 text-secondary text-sm bg-tertiary py-2 px-4 rounded-lg">
-                  <span className="truncate max-w-[200px]">{file.name}</span>
-                  <button type="button" onClick={() => setfile(null)} className="text-red-400 hover:text-red-500 font-bold ml-2">✖</button>
+              {files.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {files.map((f, index) => (
+                    <div key={index} className="flex items-center gap-2 text-secondary text-sm bg-tertiary py-2 px-4 rounded-lg border border-gray-600">
+                      <span className="truncate max-w-[150px]">{f.name}</span>
+                      <button type="button" onClick={() => removeFile(index)} className="text-red-400 hover:text-red-500 font-bold ml-2">✖</button>
+                    </div>
+                  ))}
                 </div>
               )}
             </div>
@@ -182,6 +202,7 @@ const Contact = () => {
               type="file"
               ref={fileInputRef}
               accept={fileAccept}
+              multiple
               onChange={handleFileChange}
               className="hidden"
             />
