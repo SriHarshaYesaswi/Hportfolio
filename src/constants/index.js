@@ -269,7 +269,7 @@ const projects = [
     description:
       "An innovative platform that combines smart farming techniques with health monitoring for crops. Features include real-time chat-bot, weather predictions, and disease detection using AI.",
     technologies: ["HTML", "CSS", "JavaScript", "Firebase", "Hugging Face"],
-    link: "#"
+    link: "https://github.com/SriHarshaYesaswi/Swasth-Khet"
   },
   {
     icon: "👩",
@@ -277,7 +277,7 @@ const projects = [
     description:
       "A multi-featured web application built during the International Women's Day Hackathon to empower girls and women across four critical areas: safety, education, economic development, and healthcare.",
     technologies: ["HTML", "CSS", "Firebase", "javascript"],
-    link: "#"
+    link: "https://github.com/SriHarshaYesaswi/Skill-bloom"
   },
   {
     icon: "⚖️",
@@ -293,7 +293,14 @@ const projects = [
     description:
       "A comprehensive web application designed for adding and updating Robo Couplers products. Users can efficiently track and manage item details, including product names, quantities, costs, and current stock status (in-stock or out-of-stock).",
     technologies: ["React", "PHP", "PostgreSQL"],
-    link: "#"
+    link: "https://github.com/SriHarshaYesaswi/Stock-management"
+  },
+  {
+    icon: "✨",
+    name: "Friday-AI Chatbot",
+    description: "Developed an AI-driven assistant that improves learning productivity by enabling real-time question answering and persistent conversation history. The system leverages modern web technologies and backend integration to provide scalable, user-friendly interaction with AI-powered insights.",
+    technologies: ["HTML5", "CSS3", "JS", "React.js", "Supabase", "OpenAI API"],
+    link: "https://github.com/SriHarshaYesaswi/FRIDAY"
   }
 ];
 
