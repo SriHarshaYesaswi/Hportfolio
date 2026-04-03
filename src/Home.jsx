@@ -13,8 +13,10 @@ import { StarsCanvas } from "./components/canvas";
 const Home = () => {
   return (
     <div className="relative z-0 bg-[#050816]">
-      {/* TEMP DEBUG BANNER - remove after confirming mount */}
-      <div className="bg-hero-pattern bg-no-repeat bg-cover bg-center">
+      <div className="relative z-0">
+        <div className="absolute inset-0 z-[-1] pointer-events-none">
+          <iframe src="/tt.html" className="w-full h-full border-none" title="Background" />
+        </div>
         <Navbar />
         <Hero />
       </div>
