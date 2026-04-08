@@ -3,7 +3,7 @@ import { OrbitControls, Preload, useGLTF } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import CanvasLoader from "../Loader";
 
-const Earth = () => {
+const Earth = ({ isMobile }) => {
   const earth = useGLTF('./planet/scene.gltf');
 
   useEffect(() => {
@@ -18,7 +18,7 @@ const Earth = () => {
     <mesh>
       <ambientLight intensity={0.5} />
       <directionalLight position={[5, 5, 5]} intensity={1} />
-      <primitive object={earth.scene} scale={2.5} position-y={0} rotation-y={0} />
+      <primitive object={earth.scene} scale={isMobile ? 1.5 : 2.0} position-y={0} rotation-y={0} />
     </mesh>
   );
 };
@@ -54,7 +54,7 @@ const EarthCanvas = () => {
           maxPolarAngle={Math.PI / 2}
           minPolarAngle={Math.PI / 2}
         />
-        <Earth />
+        <Earth isMobile={isMobile} />
       </Suspense>
       <Preload all />
     </Canvas>

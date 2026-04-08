@@ -77,8 +77,8 @@ const Navbar = () => {
             <li
               key={link.id}
               className={`${active === link.title
-                  ? "text-white bg-gradient-to-r from-purple-500/40 to-pink-500/40 border border-purple-400/50 shadow-lg shadow-purple-500/30"
-                  : "text-[#ffffff90]"
+                ? "text-white bg-gradient-to-r from-purple-500/40 to-pink-500/40 border border-purple-400/50 shadow-lg shadow-purple-500/30"
+                : "text-[#ffffff90]"
                 } hover:text-white hover:bg-gradient-to-r hover:from-purple-500/50 hover:to-pink-500/50 hover:scale-110 hover:drop-shadow-xl text-[18px] font-medium cursor-pointer transition-all duration-300 ease-in-out px-6 py-3 rounded-xl hover:shadow-xl hover:shadow-purple-500/40 hover:border hover:border-purple-400/60 relative overflow-hidden`}
               onClick={() => setActive(link.title)}
             >
@@ -126,8 +126,8 @@ const Navbar = () => {
                 setToggle(false);
               }}
               className={`${active === link.title
-                  ? "text-white bg-gradient-to-r from-purple-500/40 to-pink-500/40 border border-purple-400/50 shadow-lg shadow-purple-500/30"
-                  : "text-[#ffffffb0]"
+                ? "text-white bg-gradient-to-r from-purple-500/40 to-pink-500/40 border border-purple-400/50 shadow-lg shadow-purple-500/30"
+                : "text-[#ffffffb0]"
                 } text-[22px] mt-2 hover:text-white hover:bg-gradient-to-r hover:from-purple-500/50 hover:to-pink-500/50 hover:scale-105 font-medium cursor-pointer transition-all duration-300 ease-in-out px-6 py-4 rounded-xl hover:shadow-xl hover:shadow-purple-500/40 hover:backdrop-blur-sm hover:border hover:border-purple-400/60 relative overflow-hidden`}
             >
               <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-pink-600/20 opacity-0 hover:opacity-100 transition-opacity duration-300"></div>

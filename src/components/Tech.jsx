@@ -22,6 +22,9 @@ const Tech = () => {
   }, []);
 
   const visibleTechs = isMobile ? technologies.slice(0, 5) : technologies;
+  // We duplicate the items so the marquee can scroll infinitely.
+  // 2 copies ensures it moves from -50% to 0% seamlessly!
+  const marqueeTechs = [...visibleTechs, ...visibleTechs];
 
   return (
     <>
@@ -30,21 +33,23 @@ const Tech = () => {
         <h2 className={styles.sectionHeadText}>Technologies</h2>
       </motion.div>
 
-      <div className="flex flex-row flex-wrap justify-center gap-10">
-        {visibleTechs.map((tech) => (
-          <div className="sm:w-36 w-28 h-28 sm:h-36" key={tech.name}>
-            <BallCanvas icon={tech.icon} />
-          </div>
-        ))}
+      <div className="flex w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] mt-5 relative">
+        <div className="flex w-max animate-marqueeRight space-x-10 px-5 hover:[animation-play-state:paused] py-5">
+          {marqueeTechs.map((tech, index) => (
+            <div className="sm:w-36 w-28 h-28 sm:h-36 flex-shrink-0" key={`tech-${index}`}>
+              <BallCanvas icon={tech.icon} />
+            </div>
+          ))}
 
-        {isMobile && (
-          <div
-            onClick={() => navigate("/all-technologies")}
-            className="sm:w-36 w-28 h-28 sm:h-36 rounded-full border border-dashed border-[#915eff] flex items-center justify-center cursor-pointer hover:bg-[#915eff]/10 text-[#915eff] text-sm font-medium transition"
-          >
-            + More
-          </div>
-        )}
+          {isMobile && (
+            <div
+              onClick={() => navigate("/all-technologies")}
+              className="sm:w-36 w-28 h-28 sm:h-36 rounded-full border border-dashed border-[#915eff] flex items-center justify-center cursor-pointer hover:bg-[#915eff]/10 text-[#915eff] text-sm font-medium transition flex-shrink-0"
+            >
+              + More
+            </div>
+          )}
+        </div>
       </div>
     </>
   );

@@ -37,9 +37,9 @@ const Computers = ({ isMobile }) => {
         <primitive
           object={computer.scene}
           // original desktop model transform
-          scale={isMobile ? 0.6 : 0.85}
-          position={isMobile ? [0, -1.8, -1.0] : [0, -3.2, -1.2]}
-          rotation={isMobile ? [0, 0, -0.02] : [-0.01, -0.15, -0.02]}
+          scale={isMobile ? 0.45 : 0.85}
+          position={isMobile ? [0, -2.5, -1.2] : [0, -3.2, -1.2]}
+          rotation={isMobile ? [-0.01, -0.15, -0.02] : [-0.01, -0.15, -0.02]}
         />
       </Float>
     </mesh>
@@ -50,7 +50,8 @@ const ComputersCanvas = () => {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia("(max-width:640px)");
+    // Increase breakpoint to 768px to cover tablets and larger mobile emulations
+    const mediaQuery = window.matchMedia("(max-width: 768px)");
     // set initial value
     setIsMobile(mediaQuery.matches);
 
@@ -63,13 +64,35 @@ const ComputersCanvas = () => {
   }, []);
 
   return (
-    <Canvas frameloop="always" shadows camera={{ position: [20, 3, 5], fov: 25 }} gl={{ preserveDrawingBuffer: true }}>
-      <Suspense fallback={<CanvasLoader />}>
-        <OrbitControls enableZoom={false} enableRotate={!isMobile} maxPolarAngle={Math.PI / 2} minPolarAngle={Math.PI / 2} />
-        <Computers isMobile={isMobile} />
-      </Suspense>
-      <Preload all />
-    </Canvas>
+    <div 
+      className="w-full h-full"
+      style={{ 
+        pointerEvents: isMobile ? "none" : "auto", 
+        touchAction: isMobile ? "auto" : "none" 
+      }}
+    >
+      <Canvas 
+        frameloop="always" 
+        shadows 
+        camera={{ position: [20, 3, 5], fov: 25 }} 
+        gl={{ preserveDrawingBuffer: true }}
+        style={{ touchAction: isMobile ? "auto" : "none" }} // override R3F default touch-action: none
+      >
+        <Suspense fallback={<CanvasLoader />}>
+          <OrbitControls 
+            enableZoom={false} 
+            enableRotate={!isMobile} 
+            enablePan={!isMobile} 
+            autoRotate 
+            autoRotateSpeed={1} 
+            maxPolarAngle={Math.PI / 2} 
+            minPolarAngle={Math.PI / 2} 
+          />
+          <Computers isMobile={isMobile} />
+        </Suspense>
+        <Preload all />
+      </Canvas>
+    </div>
   );
 };
 

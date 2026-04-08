@@ -22,6 +22,20 @@ module.exports = {
         "hero-pattern":
           "url('https://ik.imagekit.io/bqzlidc77g/my%20portfolio/herobg.png?updatedAt=1749961111628&tr=f-auto')",
       },
+      keyframes: {
+        marqueeRight: {
+          '0%': { transform: 'translateX(-50%)' },
+          '100%': { transform: 'translateX(0%)' },
+        },
+        marqueeLeft: {
+          '0%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-50%)' },
+        },
+      },
+      animation: {
+        marqueeRight: 'marqueeRight 35s linear infinite',
+        marqueeLeft: 'marqueeLeft 35s linear infinite',
+      },
     },
   },
   plugins: [],
