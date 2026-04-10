@@ -4,33 +4,48 @@ import { OrbitControls, Preload, useGLTF, Float } from "@react-three/drei";
 import CanvasLoader from "../Loader";
 
 const Computers = ({ isMobile }) => {
-  // Load the original desktop PC GLTF model
   const computer = useGLTF("/desktop_pc/scene.gltf");
 
-
-
   return (
-    <mesh>
-      <hemisphereLight intensity={0.6} groundColor="black" />
-      <pointLight intensity={1} />
+    <>
+      {/* Ambient Lighting for overall illumination */}
+      <ambientLight intensity={0.8} />
+      
+      {/* Hemisphere Light for realistic lighting */}
+      <hemisphereLight intensity={1.2} skyColor="#ffffff" groundColor="#000000" />
+      
+      {/* Directional Light for shadows */}
+      <directionalLight
+        position={[10, 20, 10]}
+        intensity={1.5}
+        castShadow
+        shadow-mapSize-width={2048}
+        shadow-mapSize-height={2048}
+      />
+      
+      {/* Point Lights for accent */}
+      <pointLight position={[-10, 20, -5]} intensity={0.8} />
+      <pointLight position={[15, -10, 10]} intensity={0.6} />
+
+      {/* Spotlight for emphasis */}
       <spotLight
-        position={[-20, 50, 10]}
-        angle={0.12}
+        position={[20, 30, 20]}
+        angle={0.3}
         penumbra={1}
-        intensity={1}
+        intensity={1.2}
         castShadow
       />
 
-      <Float speed={2} rotationIntensity={0.2} floatIntensity={1.5} floatingRange={[0, 0]}>
+      {/* Model with Float animation */}
+      <Float speed={2} rotationIntensity={0.3} floatIntensity={0.8} floatingRange={[-0.5, 0.5]}>
         <primitive
           object={computer.scene}
-          // original desktop model transform
-          scale={isMobile ? 0.5 : 0.85}
-          position={isMobile ? [0, -3, -1.5] : [0, -3.2, -1.2]}
-          rotation={isMobile ? [-0.01, -0.2, -0.1] : [-0.01, -0.15, -0.02]}
+          scale={isMobile ? 0.6 : 0.9}
+          position={isMobile ? [0, -2.5, -1.5] : [0, -3, -1]}
+          rotation={isMobile ? [-0.01, -0.2, -0.1] : [-0.01, -0.15, 0]}
         />
       </Float>
-    </mesh>
+    </>
   );
 };
 
@@ -40,10 +55,7 @@ const ComputersCanvas = () => {
   );
 
   useEffect(() => {
-    // Increase breakpoint to 768px to cover tablets and larger mobile emulations
     const mediaQuery = window.matchMedia("(max-width: 768px)");
-    
-    // We already initialized it above, but ensure it's up to date
     setIsMobile(mediaQuery.matches);
 
     const handleMediaQueryChange = (event) => {
@@ -64,20 +76,32 @@ const ComputersCanvas = () => {
     >
       <Canvas 
         frameloop="always" 
-        shadows 
-        camera={{ position: [20, 3, 5], fov: 25 }} 
-        gl={{ preserveDrawingBuffer: true }}
-        style={{ touchAction: isMobile ? "auto" : "none" }} // override R3F default touch-action: none
+        shadows={{type: 'PCFShadowMap'}}
+        dpr={[1, 2]}
+        camera={{ 
+          position: isMobile ? [0, 5, 10] : [12, 5, 8], 
+          fov: isMobile ? 50 : 45,
+          near: 0.1,
+          far: 1000
+        }} 
+        gl={{ 
+          preserveDrawingBuffer: true,
+          antialias: true,
+          alpha: true,
+          precision: "highp"
+        }}
+        style={{ touchAction: isMobile ? "auto" : "none" }}
       >
         <Suspense fallback={<CanvasLoader />}>
           <OrbitControls 
             enableZoom={false} 
             enableRotate={!isMobile} 
-            enablePan={!isMobile} 
+            enablePan={false} 
             autoRotate 
-            autoRotateSpeed={1} 
-            maxPolarAngle={Math.PI / 2} 
-            minPolarAngle={Math.PI / 2} 
+            autoRotateSpeed={2} 
+            maxPolarAngle={Math.PI}
+            minPolarAngle={0}
+            target={[0, 0, 0]}
           />
           <Computers isMobile={isMobile} />
         </Suspense>
