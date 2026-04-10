@@ -7,19 +7,7 @@ const Computers = ({ isMobile }) => {
   // Load the original desktop PC GLTF model
   const computer = useGLTF("/desktop_pc/scene.gltf");
 
-  // Center any geometries so the model pivots around its center
-  useEffect(() => {
-    if (!computer || !computer.scene) return;
-    computer.scene.traverse((child) => {
-      if (child.isMesh && child.geometry) {
-        try {
-          child.geometry.center();
-        } catch (e) {
-          // ignore geometry center errors for non-BufferGeometry
-        }
-      }
-    });
-  }, [computer]);
+
 
   return (
     <mesh>
@@ -37,9 +25,9 @@ const Computers = ({ isMobile }) => {
         <primitive
           object={computer.scene}
           // original desktop model transform
-          scale={isMobile ? 0.45 : 0.85}
-          position={isMobile ? [0, -2.5, -1.2] : [0, -3.2, -1.2]}
-          rotation={isMobile ? [-0.01, -0.15, -0.02] : [-0.01, -0.15, -0.02]}
+          scale={isMobile ? 0.5 : 0.85}
+          position={isMobile ? [0, -3, -1.5] : [0, -3.2, -1.2]}
+          rotation={isMobile ? [-0.01, -0.2, -0.1] : [-0.01, -0.15, -0.02]}
         />
       </Float>
     </mesh>
@@ -47,12 +35,15 @@ const Computers = ({ isMobile }) => {
 };
 
 const ComputersCanvas = () => {
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== "undefined" ? window.matchMedia("(max-width: 768px)").matches : false
+  );
 
   useEffect(() => {
     // Increase breakpoint to 768px to cover tablets and larger mobile emulations
     const mediaQuery = window.matchMedia("(max-width: 768px)");
-    // set initial value
+    
+    // We already initialized it above, but ensure it's up to date
     setIsMobile(mediaQuery.matches);
 
     const handleMediaQueryChange = (event) => {
