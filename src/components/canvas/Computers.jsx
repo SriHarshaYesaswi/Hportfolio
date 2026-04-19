@@ -10,9 +10,10 @@ const Computers = ({ isMobile }) => {
   // Gentle floating animation
   useFrame((state) => {
     if (groupRef.current) {
-      const baseY = isMobile ? -1.2 : -1.5;
+      // move the whole group slightly lower so the model sits more in the middle
+      const baseY = isMobile ? -1.0 : -1.2;
       groupRef.current.position.y =
-        baseY + Math.sin(state.clock.elapsedTime * 1.2) * 0.08;
+        baseY + Math.sin(state.clock.elapsedTime * 1.2) * 0.05;
     }
   });
 
@@ -54,9 +55,10 @@ const Computers = ({ isMobile }) => {
 
       <primitive
         object={computer.scene}
-        scale={isMobile ? 0.6 : 0.75}
-        position={isMobile ? [0, -2.5, -2.5] : [0, -1.5, -1.5]}
-        rotation={[-0.01, -0.2, -0.1]}
+        scale={isMobile ? 0.45 : 0.75}
+        // lower the model a bit so it appears centered in the section
+        position={isMobile ? [0, -1.05, 0] : [0, -1.25, 0]}
+        rotation={[-0.01, -0.2, -0.05]}
       />
     </group>
   );
@@ -79,10 +81,11 @@ const ComputersCanvas = () => {
 
   return (
     <div
-      className="absolute inset-0 z-0"
+      className="absolute inset-0 z-0 flex items-center justify-center"
       style={{
-        pointerEvents: isMobile ? "none" : "auto",
-        touchAction: isMobile ? "auto" : "none",
+        pointerEvents: "auto",
+        touchAction: "auto",
+        height: isMobile ? "60vh" : "100%",
       }}
     >
       <Canvas
@@ -90,7 +93,8 @@ const ComputersCanvas = () => {
         shadows={!isMobile}
         dpr={isMobile ? [1, 1] : [1, 2]}
         camera={{
-          position: [20, 3, 5],
+          // center camera on origin so the model appears in the middle
+          position: isMobile ? [0, 1.2, 4] : [0, 1.5, 6],
           fov: isMobile ? 30 : 25,
         }}
         gl={{ preserveDrawingBuffer: true, powerPreference: "high-performance" }}
@@ -99,16 +103,16 @@ const ComputersCanvas = () => {
         <Suspense fallback={<CanvasLoader />}>
           <OrbitControls
             enableZoom={false}
-            enableRotate={!isMobile}
+            enableRotate={true}
             enablePan={false}
             autoRotate
             autoRotateSpeed={0.8}
             maxPolarAngle={Math.PI / 2}
             minPolarAngle={Math.PI / 2}
           />
-          <Computers isMobile={isMobile} />
+            <Computers isMobile={isMobile} />
         </Suspense>
-        {!isMobile && <Preload all />}
+        <Preload all />
       </Canvas>
     </div>
   );
