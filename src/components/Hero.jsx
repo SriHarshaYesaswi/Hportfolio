@@ -9,19 +9,18 @@ const Hero = () => {
 
       {/* Text overlay — positioned on top of the canvas */}
       <div
-        className={`${styles.paddingX} absolute inset-0 sm:top-[70px] top-[90px] max-w-7xl mx-auto flex flex-row items-start gap-5 z-10 pointer-events-none`}
+        className={`${styles.paddingX} absolute inset-0 sm:top-[70px] top-[90px] max-w-7xl mx-auto flex sm:flex-row flex-col sm:items-start items-center gap-5 z-10 pointer-events-none`}
       >
         <div className="flex flex-col justify-center items-center mt-5">
           <div className="w-5 h-5 rounded-full bg-[#915eff]"></div>
           <div className="w-1 sm:h-80 h-40 violet-gradient"></div>
         </div>
-        <div>
+        <div className="flex-1">
           <h1 className={`${styles.heroHeadText} text-white`}>
             Hi, I'm <span className="text-[#915eff]">Sri Harsha</span>
           </h1>
-          <p className={`${styles.heroSubText} mt-2 text-white`}>
-            I'm a Front-end Developer,<br className="sm:block hidden" />{" "}
-            UI Designer.
+          <p className={`${styles.heroSubText} mt-2 text-white text-center sm:text-left`}>
+            I'm a Front-end Developer,<br className="sm:block hidden" /> UI Designer.
           </p>
         </div>
       </div>
