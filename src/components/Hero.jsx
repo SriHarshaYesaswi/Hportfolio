@@ -3,7 +3,7 @@ import { styles } from "../styles";
 
 const Hero = () => {
   return (
-    <section className="relative w-full h-screen mx-auto overflow-hidden bg-[#050816]">
+    <section className="relative w-full h-screen mx-auto overflow-hidden">
       {/* 3D Canvas — fills the entire section behind text */}
       <ComputersCanvas />
 
@@ -18,7 +18,7 @@ const Hero = () => {
 
         <div>
           <h1 className={`${styles.heroHeadText} text-white`}>
-            Hi, I&apos;m <span className="text-[#915eff]">Sri Harsha</span>
+            Hi, I'm <span className="text-[#915eff]">Sri Harsha</span>
           </h1>
           <p className={`${styles.heroSubText} mt-2 text-white-100`}>
             I'm a Front-end Developer,<br className="sm:block hidden" /> UI Designer.

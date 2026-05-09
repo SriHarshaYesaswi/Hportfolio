@@ -25,14 +25,7 @@ const Computers = ({ isMobile }) => {
     }
   }, [computer]);
 
-  // Gentle floating animation around centered origin
-  useFrame((state) => {
-    if (groupRef.current) {
-      const baseY = isMobile ? -0.05 : -0.12;
-      groupRef.current.position.y =
-        baseY + Math.sin(state.clock.elapsedTime * 1.2) * 0.03;
-    }
-  });
+  // Removed gentle floating animation as per user request
 
   return (
     <group ref={groupRef}>
@@ -73,9 +66,9 @@ const Computers = ({ isMobile }) => {
       {computer && computer.scene && (
         <primitive
           object={computer.scene}
-          scale={isMobile ? 0.55 : 0.6}
-          position={[0, 0, 0]}
-          rotation={[-0.01, -0.2, -0.08]}
+          scale={isMobile ? 0.015 : 0.2}
+          position={[0.5, -0.65, 0]}
+          rotation={[-0.01, -0.3, -0.08]}
         />
       )}
     </group>
@@ -99,10 +92,13 @@ const ComputersCanvas = () => {
 
   return (
     <div
-      className="absolute inset-0 z-0 w-full h-full"
+      className="absolute z-0 w-full"
       style={{
         pointerEvents: "auto",
         touchAction: "auto",
+        bottom: 0,
+        top: isMobile ? "50%" : 0,
+        height: isMobile ? "50%" : "100%",
       }}
     >
       <Canvas
@@ -110,18 +106,18 @@ const ComputersCanvas = () => {
         shadows={!isMobile}
         dpr={isMobile ? [1, 1] : [1, 2]}
         camera={{
-          position: isMobile ? [0, 2, 7] : [0, 1.6, 5.5],
-          fov: isMobile ? 55 : 25,
+          position: isMobile ? [0, 0, 6] : [0, 1.6, 5.5],
+          fov: isMobile ? 30 : 25,
         }}
-        gl={{ preserveDrawingBuffer: true, powerPreference: isMobile ? "default" : "high-performance" }}
-        style={{ width: "100%", height: "100%", touchAction: isMobile ? "auto" : "none" }}
+        gl={{ preserveDrawingBuffer: true, powerPreference: "high-performance" }}
+        style={{ touchAction: isMobile ? "auto" : "none" }}
       >
         <Suspense fallback={<CanvasLoader />}>
           <OrbitControls
             enableZoom={false}
             enableRotate={!isMobile}
             enablePan={false}
-            autoRotate={!isMobile}
+            autoRotate
             autoRotateSpeed={0.8}
             maxPolarAngle={Math.PI / 2}
             minPolarAngle={Math.PI / 2}

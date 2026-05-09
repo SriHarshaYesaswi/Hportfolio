@@ -34,8 +34,19 @@ const EarthCanvas = () => {
       setIsMobile(event.matches);
     };
 
-    mediaQuery.addEventListener("change", handleMediaQueryChange);
-    return () => mediaQuery.removeEventListener("change", handleMediaQueryChange);
+    if (typeof mediaQuery.addEventListener === "function") {
+      mediaQuery.addEventListener("change", handleMediaQueryChange);
+    } else if (typeof mediaQuery.addListener === "function") {
+      mediaQuery.addListener(handleMediaQueryChange);
+    }
+
+    return () => {
+      if (typeof mediaQuery.removeEventListener === "function") {
+        mediaQuery.removeEventListener("change", handleMediaQueryChange);
+      } else if (typeof mediaQuery.removeListener === "function") {
+        mediaQuery.removeListener(handleMediaQueryChange);
+      }
+    };
   }, []);
 
   return (

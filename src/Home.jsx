@@ -18,8 +18,19 @@ const Home = () => {
     setIsMobile(mediaQuery.matches);
 
     const handler = (e) => setIsMobile(e.matches);
-    mediaQuery.addEventListener("change", handler);
-    return () => mediaQuery.removeEventListener("change", handler);
+    if (typeof mediaQuery.addEventListener === "function") {
+      mediaQuery.addEventListener("change", handler);
+    } else if (typeof mediaQuery.addListener === "function") {
+      mediaQuery.addListener(handler);
+    }
+
+    return () => {
+      if (typeof mediaQuery.removeEventListener === "function") {
+        mediaQuery.removeEventListener("change", handler);
+      } else if (typeof mediaQuery.removeListener === "function") {
+        mediaQuery.removeListener(handler);
+      }
+    };
   }, []);
 
   return (
