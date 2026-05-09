@@ -13,6 +13,11 @@
   color-scheme: dark;
 }
 
+body {
+  background-color: #050816;
+  color: white;
+}
+
 /* No explicit body cursor rule — allow user agent / elements to control cursor */
 
 /* Custom cursor styles */

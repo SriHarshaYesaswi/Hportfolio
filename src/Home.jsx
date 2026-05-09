@@ -34,7 +34,7 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="relative z-0 bg-[#050816]">
+    <div className="relative z-0 bg-primary">
       <div className="relative z-0">
         {!isMobile && (
           <div className="absolute inset-0 z-[-1] pointer-events-none">

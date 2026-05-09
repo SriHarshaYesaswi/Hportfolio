@@ -60,15 +60,15 @@ const Computers = ({ isMobile }) => {
       />
 
       {/* Back-rim light to separate model from background */}
-      <pointLight position={[-15, 5, -15]} intensity={1.5} color="#915eff" />
+      <pointLight position={[-10, 5, -15]} intensity={1.5} color="#915eff" />
       <pointLight position={[10, -5, 10]} intensity={0.8} />
 
       {computer && computer.scene && (
         <primitive
           object={computer.scene}
           scale={isMobile ? 0.015 : 0.2}
-          position={[0.5, -0.65, 0]}
-          rotation={[-0.01, -0.3, -0.08]}
+          position={[1.1, -0.75, 0.1]}
+          rotation={[0.01, -0.3, -0.08]}
         />
       )}
     </group>
@@ -92,13 +92,10 @@ const ComputersCanvas = () => {
 
   return (
     <div
-      className="absolute z-0 w-full"
+      className="absolute inset-0 z-0 w-full h-full"
       style={{
         pointerEvents: "auto",
         touchAction: "auto",
-        bottom: 0,
-        top: isMobile ? "50%" : 0,
-        height: isMobile ? "50%" : "100%",
       }}
     >
       <Canvas
@@ -109,7 +106,7 @@ const ComputersCanvas = () => {
           position: isMobile ? [0, 0, 6] : [0, 1.6, 5.5],
           fov: isMobile ? 30 : 25,
         }}
-        gl={{ preserveDrawingBuffer: true, powerPreference: "high-performance" }}
+        gl={{ preserveDrawingBuffer: true, powerPreference: "high-performance", alpha: true }}
         style={{ touchAction: isMobile ? "auto" : "none" }}
       >
         <Suspense fallback={<CanvasLoader />}>
