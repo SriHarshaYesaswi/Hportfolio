@@ -35,13 +35,13 @@ const Home = () => {
 
   return (
     <div className="relative z-0 bg-primary">
+      <Navbar />
       <div className="relative z-0">
         {!isMobile && (
           <div className="absolute inset-0 z-[-1] pointer-events-none">
             <iframe src="/tt.html" className="w-full h-full border-none" title="Background" />
           </div>
         )}
-        <Navbar />
         <Hero />
       </div>
       <About />

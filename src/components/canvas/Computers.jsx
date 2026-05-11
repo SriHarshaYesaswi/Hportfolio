@@ -60,15 +60,15 @@ const Computers = ({ isMobile }) => {
       />
 
       {/* Back-rim light to separate model from background */}
-      <pointLight position={[-10, 5, -15]} intensity={1.5} color="#915eff" />
+      <pointLight position={[-15, 5, -15]} intensity={1.5} color="#915eff" />
       <pointLight position={[10, -5, 10]} intensity={0.8} />
 
       {computer && computer.scene && (
         <primitive
           object={computer.scene}
-          scale={isMobile ? 0.015 : 0.2}
-          position={[1.1, -0.75, 0.1]}
-          rotation={[0.01, -0.3, -0.08]}
+          scale={isMobile ? 0.15 : 0.2}
+          position={isMobile ? [0, -1.3, 0.1] : [1, -0.65, -0.01]}
+          rotation={isMobile ? [0, -0.5, -0.08] : [0.01, -0.3, -0.08]}
         />
       )}
     </group>
@@ -86,8 +86,19 @@ const ComputersCanvas = () => {
     setIsMobile(mediaQuery.matches);
 
     const handler = (e) => setIsMobile(e.matches);
-    mediaQuery.addEventListener("change", handler);
-    return () => mediaQuery.removeEventListener("change", handler);
+    if (typeof mediaQuery.addEventListener === "function") {
+      mediaQuery.addEventListener("change", handler);
+    } else if (typeof mediaQuery.addListener === "function") {
+      mediaQuery.addListener(handler);
+    }
+
+    return () => {
+      if (typeof mediaQuery.removeEventListener === "function") {
+        mediaQuery.removeEventListener("change", handler);
+      } else if (typeof mediaQuery.removeListener === "function") {
+        mediaQuery.removeListener(handler);
+      }
+    };
   }, []);
 
   return (

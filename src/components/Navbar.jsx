@@ -50,12 +50,14 @@ const Navbar = () => {
       className={`${styles.paddingX} w-full flex items-center py-2 z-20 bg-[#050a208e] fixed`}
     >
       <div className="w-full flex justify-between items-center max-w-7xl mx-auto">
-        <Link
-          to="/"
+        <a
+          href="#"
           className="flex items-center gap-2 hover:scale-105 transition-transform duration-200"
-          onClick={() => {
+          onClick={(e) => {
+            e.preventDefault();
             setActive("");
-            window.scrollTo(0, 0);
+            window.scrollTo({ top: 0, behavior: "smooth" });
+            window.history.pushState(null, "", "/");
           }}
         >
           <img
@@ -70,21 +72,29 @@ const Navbar = () => {
             <span className="sm:block font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">Sri</span>
             <span className="text-white">| Harsha</span>
           </p>
-        </Link>
+        </a>
 
         <ul className="list-none hidden text-nowrap sm:flex flex-row gap-10">
           {navLinks.map((link) => (
-            <li
-              key={link.id}
-              className={`${active === link.title
-                ? "text-white bg-gradient-to-r from-purple-500/40 to-pink-500/40 border border-purple-400/50 shadow-lg shadow-purple-500/30"
-                : "text-[#ffffff90]"
-                } hover:text-white hover:bg-gradient-to-r hover:from-purple-500/50 hover:to-pink-500/50 hover:scale-110 hover:drop-shadow-xl text-[18px] font-medium cursor-pointer transition-all duration-300 ease-in-out px-6 py-3 rounded-xl hover:shadow-xl hover:shadow-purple-500/40 hover:border hover:border-purple-400/60 relative overflow-hidden`}
-              onClick={() => setActive(link.title)}
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-pink-600/20 opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
-              <a href={`#${link.id}`} className="relative z-10">
-                {link.title}
+            <li key={link.id}>
+              <a
+                href={`#${link.id}`}
+                className={`${active === link.title
+                  ? "text-white bg-gradient-to-r from-purple-500/40 to-pink-500/40 border border-purple-400/50 shadow-lg shadow-purple-500/30"
+                  : "text-[#ffffff90]"
+                  } flex items-center justify-center hover:text-white hover:bg-gradient-to-r hover:from-purple-500/50 hover:to-pink-500/50 hover:scale-110 hover:drop-shadow-xl text-[18px] font-medium cursor-pointer transition-all duration-300 ease-in-out px-6 py-3 rounded-xl hover:shadow-xl hover:shadow-purple-500/40 hover:border hover:border-purple-400/60 relative overflow-hidden`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setActive(link.title);
+                  const element = document.getElementById(link.id);
+                  if (element) {
+                    element.scrollIntoView({ behavior: "smooth" });
+                    window.history.pushState(null, "", `#${link.id}`);
+                  }
+                }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-pink-600/20 opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
+                <span className="relative z-10">{link.title}</span>
               </a>
             </li>
           ))}
@@ -92,17 +102,18 @@ const Navbar = () => {
 
         {/* Mobile menu icon */}
         <div className="sm:hidden flex flex-1 justify-end items-center">
-          {toggle ? (
-            <FiX
-              className="w-[28px] h-[28px] text-white cursor-pointer"
-              onClick={() => setToggle(false)}
-            />
-          ) : (
-            <FiMenu
-              className="w-[28px] h-[28px] text-white cursor-pointer"
-              onClick={() => setToggle(true)}
-            />
-          )}
+          <button
+            type="button"
+            onClick={() => setToggle(!toggle)}
+            className="w-[36px] h-[36px] flex items-center justify-center cursor-pointer focus:outline-none z-50"
+            aria-label="Toggle menu"
+          >
+            {toggle ? (
+              <FiX className="w-[28px] h-[28px] text-white" />
+            ) : (
+              <FiMenu className="w-[28px] h-[28px] text-white" />
+            )}
+          </button>
         </div>
       </div>
 
@@ -119,20 +130,27 @@ const Navbar = () => {
           </div>
 
           {navLinks.map((link) => (
-            <span
+            <a
               key={link.id}
-              onClick={() => {
+              href={`#${link.id}`}
+              onClick={(e) => {
+                e.preventDefault();
                 setActive(link.title);
                 setToggle(false);
+                const element = document.getElementById(link.id);
+                if (element) {
+                  element.scrollIntoView({ behavior: "smooth" });
+                  window.history.pushState(null, "", `#${link.id}`);
+                }
               }}
               className={`${active === link.title
                 ? "text-white bg-gradient-to-r from-purple-500/40 to-pink-500/40 border border-purple-400/50 shadow-lg shadow-purple-500/30"
                 : "text-[#ffffffb0]"
-                } text-[22px] mt-2 hover:text-white hover:bg-gradient-to-r hover:from-purple-500/50 hover:to-pink-500/50 hover:scale-105 font-medium cursor-pointer transition-all duration-300 ease-in-out px-6 py-4 rounded-xl hover:shadow-xl hover:shadow-purple-500/40 hover:backdrop-blur-sm hover:border hover:border-purple-400/60 relative overflow-hidden`}
+                } flex items-center text-[22px] mt-2 hover:text-white hover:bg-gradient-to-r hover:from-purple-500/50 hover:to-pink-500/50 hover:scale-105 font-medium cursor-pointer transition-all duration-300 ease-in-out px-6 py-4 rounded-xl hover:shadow-xl hover:shadow-purple-500/40 hover:backdrop-blur-sm hover:border hover:border-purple-400/60 relative overflow-hidden`}
             >
               <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-pink-600/20 opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
-              <a href={`#${link.id}`} className="relative z-10">{link.title}</a>
-            </span>
+              <span className="relative z-10">{link.title}</span>
+            </a>
           ))}
         </div>
       </div>
