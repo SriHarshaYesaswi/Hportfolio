@@ -38,30 +38,44 @@ const Ball = (props) => {
 
 
 const BallCanvas = ({ icon }) => {
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window === "undefined" || !window.matchMedia) return false;
+    const mqWidth = window.matchMedia("(max-width:640px)");
+    const mqTouch = window.matchMedia("(hover: none) and (pointer: coarse)");
+    return mqWidth.matches || mqTouch.matches;
+  });
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia("(max-width:640px)");
-    setIsMobile(mediaQuery.matches);
+    const mqWidth = window.matchMedia("(max-width:640px)");
+    const mqTouch = window.matchMedia("(hover: none) and (pointer: coarse)");
+    const handler = () => setIsMobile(mqWidth.matches || mqTouch.matches);
 
-    const handleMediaQueryChange = (event) => {
-      setIsMobile(event.matches);
-    };
-
-    if (typeof mediaQuery.addEventListener === "function") {
-      mediaQuery.addEventListener("change", handleMediaQueryChange);
-    } else if (typeof mediaQuery.addListener === "function") {
-      mediaQuery.addListener(handleMediaQueryChange);
+    if (typeof mqWidth.addEventListener === "function") {
+      mqWidth.addEventListener("change", handler);
+      mqTouch.addEventListener("change", handler);
+    } else {
+      mqWidth.addListener(handler);
+      mqTouch.addListener(handler);
     }
 
     return () => {
-      if (typeof mediaQuery.removeEventListener === "function") {
-        mediaQuery.removeEventListener("change", handleMediaQueryChange);
-      } else if (typeof mediaQuery.removeListener === "function") {
-        mediaQuery.removeListener(handleMediaQueryChange);
+      if (typeof mqWidth.removeEventListener === "function") {
+        mqWidth.removeEventListener("change", handler);
+        mqTouch.removeEventListener("change", handler);
+      } else {
+        mqWidth.removeListener(handler);
+        mqTouch.removeListener(handler);
       }
     };
   }, []);
+
+  if (isMobile) {
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <div className="w-20 h-20 rounded-xl bg-gradient-to-r from-[#151030] to-[#050816] border border-[#915eff]/20" />
+      </div>
+    );
+  }
 
   return (
     <Canvas frameloop="demand" gl={{ preserveDrawingBuffer: true }}>

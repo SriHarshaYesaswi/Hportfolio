@@ -23,31 +23,48 @@ const Earth = ({ isMobile }) => {
   );
 };
 
-const EarthCanvas = () => {
-  const [isMobile, setIsMobile] = useState(false);
+const EarthCanvas = ({ isMobile: propIsMobile } = {}) => {
+  const [isMobileState, setIsMobileState] = useState(() => {
+    if (typeof window === "undefined" || !window.matchMedia) return false;
+    const mqWidth = window.matchMedia("(max-width:640px)");
+    const mqTouch = window.matchMedia("(hover: none) and (pointer: coarse)");
+    return mqWidth.matches || mqTouch.matches;
+  });
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia("(max-width:640px)");
-    setIsMobile(mediaQuery.matches);
+    if (typeof propIsMobile === "boolean") return;
+    const mqWidth = window.matchMedia("(max-width:640px)");
+    const mqTouch = window.matchMedia("(hover: none) and (pointer: coarse)");
+    const handler = () => setIsMobileState(mqWidth.matches || mqTouch.matches);
 
-    const handleMediaQueryChange = (event) => {
-      setIsMobile(event.matches);
-    };
-
-    if (typeof mediaQuery.addEventListener === "function") {
-      mediaQuery.addEventListener("change", handleMediaQueryChange);
-    } else if (typeof mediaQuery.addListener === "function") {
-      mediaQuery.addListener(handleMediaQueryChange);
+    if (typeof mqWidth.addEventListener === "function") {
+      mqWidth.addEventListener("change", handler);
+      mqTouch.addEventListener("change", handler);
+    } else {
+      mqWidth.addListener(handler);
+      mqTouch.addListener(handler);
     }
 
     return () => {
-      if (typeof mediaQuery.removeEventListener === "function") {
-        mediaQuery.removeEventListener("change", handleMediaQueryChange);
-      } else if (typeof mediaQuery.removeListener === "function") {
-        mediaQuery.removeListener(handleMediaQueryChange);
+      if (typeof mqWidth.removeEventListener === "function") {
+        mqWidth.removeEventListener("change", handler);
+        mqTouch.removeEventListener("change", handler);
+      } else {
+        mqWidth.removeListener(handler);
+        mqTouch.removeListener(handler);
       }
     };
-  }, []);
+  }, [propIsMobile]);
+
+  const isMobile = typeof propIsMobile === "boolean" ? propIsMobile : isMobileState;
+
+  if (isMobile) {
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <div className="w-36 h-36 rounded-xl bg-gradient-to-r from-[#151030] to-[#050816] border border-[#915eff]/20" />
+      </div>
+    );
+  }
 
   return (
     <Canvas

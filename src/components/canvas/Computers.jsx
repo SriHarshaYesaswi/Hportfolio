@@ -13,6 +13,27 @@ const Computers = ({ isMobile }) => {
   useEffect(() => {
     if (computer && computer.scene && !centeredRef.current) {
       try {
+        // Defensive: ensure geometry position attributes don't contain NaN
+        let hasInvalid = false;
+        computer.scene.traverse((child) => {
+          if (child.isMesh && child.geometry && child.geometry.attributes && child.geometry.attributes.position) {
+            const arr = child.geometry.attributes.position.array;
+            for (let i = 0; i < arr.length; i++) {
+              const v = arr[i];
+              if (!Number.isFinite(v) || Number.isNaN(v)) {
+                hasInvalid = true;
+                break;
+              }
+            }
+          }
+        });
+
+        if (hasInvalid) {
+          console.warn("Skipping centering: model contains invalid geometry (NaN)");
+          centeredRef.current = true;
+          return;
+        }
+
         const bbox = new THREE.Box3().setFromObject(computer.scene);
         const center = bbox.getCenter(new THREE.Vector3());
         computer.scene.position.x -= center.x;
@@ -67,7 +88,8 @@ const Computers = ({ isMobile }) => {
         <primitive
           object={computer.scene}
           scale={isMobile ? 0.15 : 0.2}
-          position={isMobile ? [0, -1.3, 0.1] : [1, -0.65, -0.2]}
+          // moved slightly downward for better framing
+          position={isMobile ? [0, -2.4, 0.1] : [-1.5, -1.0, -0.9]}
           rotation={isMobile ? [0, -0.5, -0.08] : [0.01, -0.3, -0.08]}
         />
       )}
@@ -75,17 +97,20 @@ const Computers = ({ isMobile }) => {
   );
 };
 
-const ComputersCanvas = () => {
-  const [isMobile, setIsMobile] = useState(() => {
+const ComputersCanvas = ({ isMobile: propIsMobile } = {}) => {
+  const [isMobileState, setIsMobileState] = useState(() => {
     if (typeof window === "undefined") return false;
     return window.matchMedia("(max-width: 768px)").matches;
   });
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia("(max-width: 768px)");
-    setIsMobile(mediaQuery.matches);
+    // If parent provides `isMobile` prop, prefer it and skip local media watcher.
+    if (typeof propIsMobile === "boolean") return;
 
-    const handler = (e) => setIsMobile(e.matches);
+    const mediaQuery = window.matchMedia("(max-width: 768px)");
+    setIsMobileState(mediaQuery.matches);
+
+    const handler = (e) => setIsMobileState(e.matches);
     if (typeof mediaQuery.addEventListener === "function") {
       mediaQuery.addEventListener("change", handler);
     } else if (typeof mediaQuery.addListener === "function") {
@@ -99,7 +124,9 @@ const ComputersCanvas = () => {
         mediaQuery.removeListener(handler);
       }
     };
-  }, []);
+  }, [propIsMobile]);
+
+  const isMobile = typeof propIsMobile === "boolean" ? propIsMobile : isMobileState;
 
   return (
     <div
