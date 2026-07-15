@@ -58,25 +58,28 @@ const EarthCanvas = ({ isMobile: propIsMobile } = {}) => {
 
   const isMobile = typeof propIsMobile === "boolean" ? propIsMobile : isMobileState;
 
-  if (isMobile) {
-    return (
-      <div className="w-full h-full flex items-center justify-center">
-        <div className="w-36 h-36 rounded-xl bg-gradient-to-r from-[#151030] to-[#050816] border border-[#915eff]/20" />
-      </div>
-    );
-  }
-
   return (
     <Canvas
       shadows
       frameloop="demand"
-      gl={{ preserveDrawingBuffer: true }}
-      camera={{ position: [-4, 3, 6], fov: 45, near: 0.1, far: 300, }}
+      gl={{ 
+        preserveDrawingBuffer: true,
+        antialias: !isMobile,
+        alpha: true,
+        powerPreference: isMobile ? "low-power" : "high-performance"
+      }}
+      camera={{ 
+        position: [-4, 3, 6], 
+        fov: 45, 
+        near: 0.1, 
+        far: 300, 
+      }}
+      style={{ background: 'transparent' }}
     >
       <Suspense fallback={<CanvasLoader />}>
         <OrbitControls
           autoRotate
-          autoRotateSpeed={2}
+          autoRotateSpeed={isMobile ? 1 : 2}
           enableZoom={false}
           enableRotate={!isMobile}
           maxPolarAngle={Math.PI / 2}
